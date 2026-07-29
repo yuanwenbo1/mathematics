@@ -553,6 +553,109 @@ img {
   padding: 46px 0 80px;
 }
 
+.support-layout {
+  display: grid;
+  align-items: start;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+  gap: 64px;
+}
+
+.support-copy h2 {
+  margin: 0 0 18px;
+  padding: 0;
+  border: 0;
+  font-size: 26px;
+}
+
+.support-copy > p {
+  color: var(--muted);
+}
+
+.support-points {
+  margin-top: 30px;
+  border-top: 1px solid var(--line);
+}
+
+.support-point {
+  display: grid;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.support-point span {
+  color: var(--primary);
+  font-family: Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.support-point strong,
+.support-point small {
+  display: block;
+}
+
+.support-point small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.support-qr-figure {
+  margin: 0;
+  text-align: center;
+}
+
+.support-qr-frame {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.prose .support-qr-image {
+  width: 100%;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  border-radius: 4px;
+}
+
+.support-qr-figure figcaption {
+  margin-top: 12px;
+  color: var(--quiet);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.support-terms {
+  margin-top: 48px;
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.support-terms strong {
+  color: var(--text);
+}
+
+.support-terms p:last-child {
+  margin-bottom: 0;
+}
+
+.support-contact {
+  margin-top: 36px;
+}
+
+.support-contact h2 {
+  margin: 0 0 12px;
+  padding: 0;
+  border: 0;
+  font-size: 22px;
+}
+
 .library-section {
   padding-top: 26px;
 }
@@ -1016,7 +1119,7 @@ img {
 .footer-grid {
   display: grid;
   color: var(--muted);
-  grid-template-columns: 1.4fr 1fr 0.7fr;
+  grid-template-columns: 1.4fr 1fr 0.7fr 0.9fr;
   gap: 28px;
 }
 
@@ -1054,6 +1157,15 @@ img {
 
   .concept-grid figure {
     max-width: 700px;
+  }
+
+  .support-layout {
+    grid-template-columns: 1fr;
+    gap: 38px;
+  }
+
+  .support-qr-figure {
+    width: min(100%, 380px);
   }
 
   .footer-grid {
@@ -1239,6 +1351,14 @@ img {
 
   .page-header h1 {
     font-size: 32px;
+  }
+
+  .support-layout {
+    gap: 30px;
+  }
+
+  .support-qr-frame {
+    padding: 10px;
   }
 
   .book-shell {

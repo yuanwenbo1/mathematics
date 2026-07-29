@@ -28,6 +28,8 @@ nav:
     url: /exercises/
   - title: 搜索
     url: /search/
+  - title: 支持项目
+    url: /support/
 
 exclude:
   - node_modules
