@@ -1,0 +1,35 @@
+title: 数学自学教材
+description: 从儿童数学启蒙到本科数学核心课与研究方向的系统自学教材。
+url: "https://yuanwenbo1.github.io"
+baseurl: "/mathematics"
+lang: zh-CN
+timezone: Asia/Shanghai
+markdown: kramdown
+permalink: pretty
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+author:
+  name: 数学自学教材
+  role: 从启蒙到研究方向
+
+nav:
+  - title: 学习首页
+    url: /
+  - title: 教材目录
+    url: /library/
+  - title: 学习路线
+    url: /guide/
+  - title: 知识地图
+    url: /dependencies/
+  - title: 训练题集
+    url: /exercises/
+  - title: 搜索
+    url: /search/
+
+exclude:
+  - node_modules
+  - package.json
+  - package-lock.json

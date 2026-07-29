@@ -1,0 +1,7 @@
+_site/
+.jekyll-cache/
+.sass-cache/
+node_modules/
+textbook/.vitepress/
+.DS_Store
+*.log

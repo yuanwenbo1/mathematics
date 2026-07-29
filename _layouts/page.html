@@ -1,0 +1,17 @@
+---
+layout: base
+---
+
+<header class="page-header">
+  <div class="content-container">
+    {% if page.eyebrow %}<p class="eyebrow">{{ page.eyebrow }}</p>{% endif %}
+    <h1>{{ page.title }}</h1>
+    {% if page.description %}<p>{{ page.description }}</p>{% endif %}
+  </div>
+</header>
+
+<section class="page-section">
+  <div class="content-container prose">
+    {{ content }}
+  </div>
+</section>

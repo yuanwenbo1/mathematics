@@ -1,0 +1,115 @@
+stages:
+  - id: language
+    title: "阶段一：建立数学语言"
+    description: 从数感和算术出发，逐步过渡到变量、方程与函数。
+    books:
+      - id: prelude
+        code: 前置
+        title: 数据启蒙与小学数学
+        level: 启蒙 · 小学
+        duration: 建议 2-4 周
+        description: 数感、单位、分数、比例、图表和几何直觉。
+        url: /books/prelude/
+      - id: restart
+        code: "00"
+        title: 数学重新启动
+        level: 小学 · 初中桥梁
+        duration: 建议 2-3 周
+        description: 补齐运算、代数式、方程、坐标和基础几何。
+        url: /books/restart/
+      - id: functions
+        code: "01"
+        title: 函数与初等数学
+        level: 初中 · 高中
+        duration: 建议 3-4 周
+        description: 用图像理解函数、指数、对数、三角与数列。
+        url: /books/functions/
+
+  - id: foundations
+    title: "阶段二：进入本科基础"
+    description: 掌握连续数学、随机数学和离散结构的共同基础。
+    books:
+      - id: linear-algebra
+        code: "02"
+        title: 向量、矩阵与线性代数
+        level: 本科基础
+        duration: 建议 4-6 周
+        description: 向量、矩阵、线性变换、特征值、SVD 与 PCA。
+        url: /books/linear-algebra/
+      - id: calculus
+        code: "03"
+        title: 微积分与优化
+        level: 本科基础
+        duration: 建议 4-6 周
+        description: 变化率、导数、梯度、链式法则和梯度下降。
+        url: /books/calculus/
+      - id: probability
+        code: "04"
+        title: 概率统计
+        level: 本科基础
+        duration: 建议 4-6 周
+        description: 概率、分布、估计、检验、回归和模型评价。
+        url: /books/probability/
+      - id: discrete
+        code: "05"
+        title: 离散数学与算法数学
+        level: 本科基础
+        duration: 建议 3-5 周
+        description: 集合、逻辑、组合、递归、图论与复杂度。
+        url: /books/discrete-math/
+
+  - id: applications
+    title: "阶段三：在应用中检验理解"
+    description: 把线性代数、微积分和概率组合进可运行的实际问题。
+    books:
+      - id: image-processing
+        code: "06"
+        title: 图像处理数学
+        level: 应用专题
+        duration: 建议 3-4 周
+        description: 卷积、滤波、边缘、分割、形态学和几何变换。
+        url: /books/image-processing/
+      - id: ai-math
+        code: "07"
+        title: AI 数学入门
+        level: 应用专题
+        duration: 建议 3-4 周
+        description: 线性模型、损失函数、神经网络、CNN 与泛化。
+        url: /books/ai-math/
+
+  - id: advanced
+    title: "阶段四：选择专业方向"
+    description: 从知识地图进入本科进阶主题、证明训练与研究方向。
+    books:
+      - id: advanced-topics
+        code: "08"
+        title: 本科数学进阶与工程专题
+        level: 本科进阶
+        duration: 按方向选学
+        description: 微分方程、数值分析、信息论、随机过程等专题。
+        url: /books/advanced-topics/
+      - id: professional
+        code: "09"
+        title: 数学专业补充路线
+        level: 专业路线
+        duration: 长期学习
+        description: 证明、分析、代数、拓扑、几何与研究生方向地图。
+        url: /books/professional/
+
+guides:
+  - title: 学习路径
+    url: /guide/
+  - title: 数学专业与应用地图
+    url: /roadmap/
+  - title: 知识依赖图
+    url: /dependencies/
+  - title: 全套教材总纲
+    url: /outline/
+  - title: 分级训练题集
+    url: /exercises/
+  - title: 全阶段知识覆盖清单
+    url: /coverage/
+  - title: 教材编写规范
+    url: /writing-guide/
+  - title: 教材修订记录
+    url: /revisions/

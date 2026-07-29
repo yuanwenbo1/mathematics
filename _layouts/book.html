@@ -1,0 +1,82 @@
+---
+layout: base
+---
+
+<button class="book-menu-button" id="book-menu-button" type="button" aria-expanded="false" aria-controls="book-sidebar">
+  <span class="book-menu-symbol">☰</span>
+  教材目录
+</button>
+
+<div class="book-shell">
+  <aside class="book-sidebar" id="book-sidebar" aria-label="教材目录">
+    <div class="book-sidebar-head">
+      <a href="{{ '/library/' | relative_url }}">全部教材</a>
+      <button id="book-menu-close" type="button" aria-label="关闭教材目录" title="关闭教材目录">×</button>
+    </div>
+
+    <nav class="curriculum-nav">
+      <div class="curriculum-group guide-group">
+        <strong>开始学习</strong>
+        {% for guide in site.data.curriculum.guides %}
+          <a href="{{ guide.url | relative_url }}"{% if page.url == guide.url %} class="active" aria-current="page"{% endif %}>{{ guide.title }}</a>
+        {% endfor %}
+      </div>
+
+      {% for stage in site.data.curriculum.stages %}
+        <div class="curriculum-group">
+          <strong>{{ stage.title | remove: '阶段一：' | remove: '阶段二：' | remove: '阶段三：' | remove: '阶段四：' }}</strong>
+          {% for book in stage.books %}
+            <a class="curriculum-link{% if page.url == book.url %} active{% endif %}" href="{{ book.url | relative_url }}" data-course-id="{{ book.id }}"{% if page.url == book.url %} aria-current="page"{% endif %}>
+              <span>{{ book.code }}</span>
+              <em>{{ book.title }}</em>
+              <i aria-hidden="true"></i>
+            </a>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </nav>
+  </aside>
+
+  <article class="book-reader">
+    <div class="reader-toolbar">
+      <a href="{{ '/library/' | relative_url }}">教材目录</a>
+      <div class="font-controls" aria-label="阅读字号">
+        <button type="button" data-font-action="decrease" aria-label="减小字号" title="减小字号">A−</button>
+        <button type="button" data-font-action="reset" aria-label="恢复默认字号" title="恢复默认字号">A</button>
+        <button type="button" data-font-action="increase" aria-label="增大字号" title="增大字号">A+</button>
+      </div>
+    </div>
+
+    <div class="prose" data-page-id="{{ page.book_id | default: page.url }}">
+      {{ content }}
+    </div>
+
+    {% if page.book_id %}
+      <section class="completion-panel" aria-label="学习完成状态">
+        <div>
+          <strong id="completion-title">完成本册学习了吗？</strong>
+          <span>进度只保存在当前浏览器中。</span>
+        </div>
+        <button id="completion-toggle" type="button" data-course-id="{{ page.book_id }}">标记完成</button>
+      </section>
+    {% endif %}
+
+    {% if page.prev_url or page.next_url %}
+      <nav class="book-pager" aria-label="教材前后导航">
+        {% if page.prev_url %}
+          <a class="pager-prev" href="{{ page.prev_url | relative_url }}"><span>上一册</span><strong>{{ page.prev_title }}</strong></a>
+        {% else %}<span></span>{% endif %}
+        {% if page.next_url %}
+          <a class="pager-next" href="{{ page.next_url | relative_url }}"><span>下一册</span><strong>{{ page.next_title }}</strong></a>
+        {% endif %}
+      </nav>
+    {% endif %}
+  </article>
+
+  <aside class="page-outline" aria-label="本页目录">
+    <strong>本页目录</strong>
+    <nav id="page-outline"></nav>
+  </aside>
+</div>
+
+<button class="book-menu-overlay" id="book-menu-overlay" type="button" aria-label="关闭教材目录"></button>
