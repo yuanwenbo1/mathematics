@@ -31,7 +31,7 @@ search: false
   <div class="site-container learning-principles" aria-label="学习方式">
     <div><span>01</span><strong>按依赖前进</strong><small>主线顺序清晰</small></div>
     <div><span>02</span><strong>每天 45-90 分钟</strong><small>阅读、手算、复述</small></div>
-    <div><span>03</span><strong>练习并验收</strong><small>会解释，也会解决问题</small></div>
+    <div><span>03</span><strong>题海训练</strong><small>600 题分学段打基础</small></div>
   </div>
 </section>
 

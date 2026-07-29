@@ -4,6 +4,8 @@
 
 中小学主题与章节的逐项对应见[中国中小学数学课程覆盖索引](https://yuanwenbo1.github.io/mathematics/k12-coverage/)。
 
+配套训练见[训练题库与分级检测](https://yuanwenbo1.github.io/mathematics/exercises/)，其中小学、初中、高中各有 200 道基础题，共 600 题，并附参考答案和错题复练建议。
+
 ## 本地预览
 
 安装 Ruby 和 Jekyll 后运行：
