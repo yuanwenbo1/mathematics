@@ -86,7 +86,7 @@
       const nextCourse = nextId ? document.querySelector(`.course-row[data-course-id="${nextId}"]`) : null;
       if (nextCourse) {
         continueLink.href = nextCourse.href;
-        continueLink.firstChild.textContent = count ? "继续学习 " : "开始第一册 ";
+        continueLink.firstChild.textContent = count ? "继续学习 " : "从小学数学开始 ";
       } else if (count === courseOrder.length) {
         continueLink.href = document.querySelector(".site-nav a[href*='/library/']")?.href || continueLink.href;
         continueLink.firstChild.textContent = "查看教材目录 ";
