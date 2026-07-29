@@ -1,5 +1,5 @@
 title: 数学自学教材
-description: 从儿童数学启蒙到本科数学核心课与研究方向的系统自学教材。
+description: 面向所有自学者，完整覆盖中国小学、初中、高中并通向大学数学的系统教材。
 url: "https://yuanwenbo1.github.io"
 baseurl: "/mathematics"
 lang: zh-CN
@@ -13,7 +13,7 @@ kramdown:
 
 author:
   name: 数学自学教材
-  role: 从启蒙到研究方向
+  role: 从小学到大学与研究方向
 
 nav:
   - title: 学习首页
@@ -24,6 +24,8 @@ nav:
     url: /guide/
   - title: 知识地图
     url: /dependencies/
+  - title: 中小学覆盖
+    url: /k12-coverage/
   - title: 训练题集
     url: /exercises/
   - title: 搜索

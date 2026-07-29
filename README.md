@@ -1,6 +1,8 @@
 # 数学自学教材网站
 
-这是一个基于 GitHub Pages + Jekyll 的中文数学学习网站，架构与个人知识库项目保持一致。教材正文位于 `textbook/`，网站模板位于 `_layouts/`，静态样式和脚本位于 `assets/`。
+这是一个基于 GitHub Pages + Jekyll 的中文数学学习网站，面向所有希望系统自学数学的学生。前三册按中国现行课程标准完整覆盖小学、初中和高中数学，后续继续进入大学数学、应用专题和研究方向。教材正文位于 `textbook/`，网站模板位于 `_layouts/`，静态样式和脚本位于 `assets/`。
+
+中小学主题与章节的逐项对应见[中国中小学数学课程覆盖索引](https://yuanwenbo1.github.io/mathematics/k12-coverage/)。
 
 ## 本地预览
 

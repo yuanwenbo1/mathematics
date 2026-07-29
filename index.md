@@ -1,7 +1,7 @@
 ---
 layout: base
 title: 学习首页
-description: 从数感和代数起步，逐步进入本科数学基础、证明训练和研究方向。
+description: 面向所有自学者，完整覆盖中国小学、初中和高中数学，并继续通向大学数学。
 permalink: /
 search: false
 ---
@@ -10,9 +10,9 @@ search: false
   <div class="site-container">
     <p class="eyebrow">系统学习路线</p>
     <h1>数学自学教材</h1>
-    <p class="intro-lead">从数感和代数起步，经过本科数学基础，最终进入证明训练和研究方向。按知识依赖向前走，每一步都用例题、练习和代码验证。</p>
+    <p class="intro-lead">面向所有想系统自学数学的学生，从中国小学、初中和高中课程开始，继续通向大学数学、证明训练和研究方向。按知识依赖学习，每一步都有讲解、例题、练习和验收。</p>
     <div class="intro-actions">
-      <a class="button primary" id="continue-learning" href="{{ '/books/prelude/' | relative_url }}">开始第一册 <span>→</span></a>
+      <a class="button primary" id="continue-learning" href="{{ '/books/prelude/' | relative_url }}">从小学数学开始 <span>→</span></a>
       <a class="button secondary" href="{{ '/guide/' | relative_url }}">查看学习方法</a>
     </div>
   </div>
@@ -31,7 +31,7 @@ search: false
   <div class="site-container learning-principles" aria-label="学习方式">
     <div><span>01</span><strong>按依赖前进</strong><small>主线顺序清晰</small></div>
     <div><span>02</span><strong>每天 45-90 分钟</strong><small>阅读、手算、复述</small></div>
-    <div><span>03</span><strong>用代码验证</strong><small>把抽象概念跑出来</small></div>
+    <div><span>03</span><strong>练习并验收</strong><small>会解释，也会解决问题</small></div>
   </div>
 </section>
 
@@ -75,8 +75,8 @@ search: false
     <div>
       <p class="eyebrow">Visual Learning</p>
       <h2>先看懂关系，再记住公式</h2>
-      <p>教材会用函数图像、矩阵变换和迭代过程解释抽象概念。第 1 册已经包含函数机器、斜率变化、二次函数开口和单位圆动画。</p>
-      <a href="{{ '/books/functions/' | relative_url }}">进入函数与初等数学 →</a>
+      <p>教材会用实物、图表、几何图形和函数图像解释抽象概念。中小学三册按国家课程标准组织，也适合成年人从任意缺口开始自学。</p>
+      <a href="{{ '/k12-coverage/' | relative_url }}">查看中小学课程覆盖索引 →</a>
     </div>
     <figure>
       <img src="{{ '/textbook/assets/functions/function-machine.png' | relative_url }}" alt="函数机器把输入按照规则变成输出">

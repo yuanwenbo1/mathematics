@@ -1,7 +1,7 @@
 ---
 layout: base
 title: 教材目录
-description: 按数学知识依赖组织的完整教材目录。
+description: 从中国小学、初中、高中到大学和研究方向的完整教材目录。
 permalink: /library/
 search: false
 ---
@@ -10,7 +10,7 @@ search: false
   <div class="site-container">
     <p class="eyebrow">Library</p>
     <h1>教材目录</h1>
-    <p>主线从数学启蒙延伸到本科数学和研究方向；图像处理与 AI 作为应用专题，用来检验基础知识是否真正会用。</p>
+    <p>前三册完整覆盖中国小学、初中和高中数学，之后按知识依赖进入大学基础、应用专题、数学专业课程和研究方向。</p>
   </div>
 </header>
 
