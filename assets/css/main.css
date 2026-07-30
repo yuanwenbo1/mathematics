@@ -182,6 +182,27 @@ img {
   color: var(--primary-dark);
 }
 
+.pwa-install-button {
+  min-height: 36px;
+  padding: 0 11px;
+  border: 1px solid var(--primary);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--primary-dark);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.pwa-install-button:hover {
+  background: var(--primary-soft);
+}
+
+.pwa-install-button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
 .nav-toggle {
   display: none;
   width: 40px;
@@ -1116,6 +1137,69 @@ img {
   background: var(--panel);
 }
 
+.pwa-status {
+  position: fixed;
+  z-index: 120;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  display: flex;
+  width: min(420px, calc(100% - 36px));
+  min-height: 48px;
+  align-items: center;
+  padding: 9px 10px 9px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  background: #10201c;
+  box-shadow: 0 12px 32px rgba(16, 32, 28, 0.22);
+  color: #fff;
+  gap: 12px;
+}
+
+.pwa-status[hidden] {
+  display: none;
+}
+
+.pwa-status > span {
+  min-width: 0;
+  flex: 1;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.pwa-update-button,
+.pwa-status-close {
+  flex: none;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+}
+
+.pwa-update-button {
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: 5px;
+  background: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.pwa-update-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.pwa-status-close {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.pwa-status-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .footer-grid {
   display: grid;
   color: var(--muted);
@@ -1286,6 +1370,13 @@ img {
     padding: 10px 12px;
   }
 
+  .site-nav .pwa-install-button {
+    width: 100%;
+    min-height: 42px;
+    padding: 0 12px;
+    text-align: left;
+  }
+
   .learning-intro {
     padding: 48px 0 40px;
   }
@@ -1389,6 +1480,12 @@ img {
 
   .pager-next {
     text-align: left;
+  }
+
+  .pwa-status {
+    right: 16px;
+    bottom: max(16px, env(safe-area-inset-bottom));
+    width: calc(100% - 32px);
   }
 }
 

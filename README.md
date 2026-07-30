@@ -35,6 +35,17 @@ search: true
 
 新增教材后，同时在 `_data/curriculum.yml` 中加入导航信息。推送到 `main` 分支后，GitHub Actions 会使用 Jekyll 构建并发布到 GitHub Pages。
 
+## PWA 应用
+
+网站支持安装到手机或电脑桌面，并预缓存教材、题库、搜索索引和必要图片。核心文件如下：
+
+- `manifest.webmanifest`：应用名称、图标、启动地址和快捷入口；
+- `service-worker.js`：整站预缓存、访问缓存、离线兜底和版本更新；
+- `offline.md`：无法命中缓存时显示的离线页面；
+- `assets/icons/`：普通、可遮罩和 Apple Touch 应用图标。
+
+PWA 必须通过 HTTPS 或 `localhost` 测试。修改缓存内容时无需手工维护版本号，Jekyll 每次构建都会生成新的缓存版本；已安装的用户会收到更新提示。
+
 ## 联系与反馈
 
 如果你发现教材内容有错误、网站使用有问题，或希望沟通项目合作，可以发送邮件至 [624799284@qq.com](mailto:624799284@qq.com)。为了便于定位问题，反馈时请尽量附上教材名称、页面地址和问题描述。

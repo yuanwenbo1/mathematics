@@ -6,10 +6,17 @@
     <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
     <meta name="description" content="{{ page.description | default: site.description }}">
     <meta name="theme-color" content="#167d63">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="数学教材">
     <link rel="canonical" href="{{ page.url | absolute_url }}">
+    <link rel="manifest" href="{{ '/manifest.webmanifest' | relative_url }}">
+    <link rel="icon" href="{{ '/assets/icons/app-icon.svg' | relative_url }}" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{{ '/assets/icons/apple-touch-icon.png' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
   </head>
-  <body class="layout-{{ page.layout | default: 'base' }}">
+  <body class="layout-{{ page.layout | default: 'base' }}" data-baseurl="{{ site.baseurl }}">
     <div class="reading-meter" aria-hidden="true"><span id="reading-meter-value"></span></div>
 
     <header class="site-header">
@@ -31,6 +38,7 @@
           {% for item in site.nav %}
             <a href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a>
           {% endfor %}
+          <button class="pwa-install-button" id="pwa-install-button" type="button" hidden>安装应用</button>
         </nav>
       </div>
     </header>
@@ -60,6 +68,12 @@
       </div>
     </footer>
 
-    <script src="{{ '/assets/js/site.js' | relative_url }}?v=20260729-k12" defer></script>
+    <div class="pwa-status" id="pwa-status" role="status" aria-live="polite" hidden>
+      <span id="pwa-status-message"></span>
+      <button class="pwa-update-button" id="pwa-update-button" type="button" hidden>立即更新</button>
+      <button class="pwa-status-close" id="pwa-status-close" type="button" title="关闭通知" aria-label="关闭通知">&times;</button>
+    </div>
+
+    <script src="{{ '/assets/js/site.js' | relative_url }}?v=20260730-pwa" defer></script>
   </body>
 </html>

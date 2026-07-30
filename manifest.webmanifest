@@ -1,0 +1,58 @@
+---
+layout: null
+permalink: /manifest.webmanifest
+---
+{
+  "id": "{{ '/' | relative_url }}",
+  "name": "数学自学教材",
+  "short_name": "数学教材",
+  "description": "面向所有自学者，覆盖中国小学、初中、高中并通向大学数学的系统教材。",
+  "lang": "zh-CN",
+  "start_url": "{{ '/' | relative_url }}?source=pwa",
+  "scope": "{{ '/' | relative_url }}",
+  "display": "standalone",
+  "background_color": "#f6f8f7",
+  "theme_color": "#167d63",
+  "orientation": "any",
+  "categories": ["education", "books"],
+  "icons": [
+    {
+      "src": "{{ '/assets/icons/app-icon-192.png' | relative_url }}",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "{{ '/assets/icons/app-icon-512.png' | relative_url }}",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "{{ '/assets/icons/app-icon-maskable-512.png' | relative_url }}",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "教材目录",
+      "short_name": "教材",
+      "url": "{{ '/library/' | relative_url }}",
+      "icons": [{ "src": "{{ '/assets/icons/app-icon-192.png' | relative_url }}", "sizes": "192x192" }]
+    },
+    {
+      "name": "训练题库",
+      "short_name": "题库",
+      "url": "{{ '/exercises/' | relative_url }}",
+      "icons": [{ "src": "{{ '/assets/icons/app-icon-192.png' | relative_url }}", "sizes": "192x192" }]
+    },
+    {
+      "name": "搜索教材",
+      "short_name": "搜索",
+      "url": "{{ '/search/' | relative_url }}",
+      "icons": [{ "src": "{{ '/assets/icons/app-icon-192.png' | relative_url }}", "sizes": "192x192" }]
+    }
+  ]
+}

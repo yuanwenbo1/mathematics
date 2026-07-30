@@ -187,4 +187,106 @@
       headings.forEach((heading) => observer.observe(heading));
     }
   }
+
+  const installButton = document.getElementById("pwa-install-button");
+  const pwaStatus = document.getElementById("pwa-status");
+  const pwaStatusMessage = document.getElementById("pwa-status-message");
+  const pwaStatusClose = document.getElementById("pwa-status-close");
+  const pwaUpdateButton = document.getElementById("pwa-update-button");
+  let installPrompt = null;
+  let statusTimer = null;
+  let pendingRegistration = null;
+  let refreshing = false;
+
+  const showPwaStatus = (message, options = {}) => {
+    if (!pwaStatus || !pwaStatusMessage || !pwaUpdateButton) return;
+    window.clearTimeout(statusTimer);
+    pwaStatusMessage.textContent = message;
+    pwaUpdateButton.hidden = !options.showUpdate;
+    pwaStatus.hidden = false;
+    if (!options.persistent) {
+      statusTimer = window.setTimeout(() => {
+        pwaStatus.hidden = true;
+      }, 5000);
+    }
+  };
+
+  if (pwaStatusClose && pwaStatus) {
+    pwaStatusClose.addEventListener("click", () => {
+      window.clearTimeout(statusTimer);
+      pwaStatus.hidden = true;
+    });
+  }
+
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+  if (installButton && isStandalone) installButton.hidden = true;
+
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    installPrompt = event;
+    if (installButton && !isStandalone) installButton.hidden = false;
+  });
+
+  if (installButton) {
+    installButton.addEventListener("click", async () => {
+      if (!installPrompt) return;
+      installButton.disabled = true;
+      await installPrompt.prompt();
+      const choice = await installPrompt.userChoice;
+      installPrompt = null;
+      installButton.disabled = false;
+      installButton.hidden = true;
+      if (choice.outcome === "accepted") showPwaStatus("应用已安装到设备");
+    });
+  }
+
+  window.addEventListener("appinstalled", () => {
+    installPrompt = null;
+    if (installButton) installButton.hidden = true;
+    showPwaStatus("应用已安装到设备");
+  });
+
+  const announceUpdate = (registration) => {
+    pendingRegistration = registration;
+    showPwaStatus("教材有新版本", { showUpdate: true, persistent: true });
+  };
+
+  if (pwaUpdateButton) {
+    pwaUpdateButton.addEventListener("click", () => {
+      pendingRegistration?.waiting?.postMessage({ type: "SKIP_WAITING" });
+      pwaUpdateButton.disabled = true;
+      if (pwaStatusMessage) pwaStatusMessage.textContent = "正在更新教材...";
+    });
+  }
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", async () => {
+      const baseUrl = document.body.dataset.baseurl || "";
+      try {
+        const registration = await navigator.serviceWorker.register(`${baseUrl}/service-worker.js`, { scope: `${baseUrl}/` });
+        if (registration.waiting && navigator.serviceWorker.controller) announceUpdate(registration);
+
+        registration.addEventListener("updatefound", () => {
+          const worker = registration.installing;
+          if (!worker) return;
+          worker.addEventListener("statechange", () => {
+            if (worker.state === "installed" && navigator.serviceWorker.controller) announceUpdate(registration);
+          });
+        });
+      } catch (error) {
+        console.error("Service Worker registration failed:", error);
+      }
+    });
+
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+  }
+
+  const showOfflineStatus = () => showPwaStatus("当前离线，正在使用已缓存教材", { persistent: true });
+  window.addEventListener("offline", showOfflineStatus);
+  window.addEventListener("online", () => showPwaStatus("网络已恢复"));
+  if (!navigator.onLine) showOfflineStatus();
 })();
