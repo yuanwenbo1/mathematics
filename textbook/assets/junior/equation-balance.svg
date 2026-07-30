@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" width="900" height="430" font-family="Segoe UI, PingFang SC, Microsoft YaHei, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">方程两边做相同操作</title>
+  <desc id="desc">平衡的天平左边是未知数加三，右边是十，两边同时减三后得到未知数等于七。</desc>
+  <rect width="900" height="430" fill="#ffffff"/>
+  <text x="450" y="48" text-anchor="middle" font-size="29" font-weight="700" fill="#17221e">等式像天平：两边必须做同样的操作</text>
+  <line x1="450" y1="104" x2="450" y2="290" stroke="#617069" stroke-width="8"/>
+  <path d="M390 328 H510 L480 286 H420 Z" fill="#eef3f0" stroke="#617069" stroke-width="3"/>
+  <line x1="205" y1="132" x2="695" y2="132" stroke="#17221e" stroke-width="8"/>
+  <circle cx="450" cy="132" r="17" fill="#d05d47"/>
+  <line x1="250" y1="132" x2="220" y2="220" stroke="#617069" stroke-width="3"/>
+  <line x1="650" y1="132" x2="680" y2="220" stroke="#617069" stroke-width="3"/>
+  <path d="M125 220 H315 Q300 282 220 282 Q140 282 125 220 Z" fill="#e4f2ed" stroke="#167d63" stroke-width="3"/>
+  <path d="M585 220 H775 Q760 282 680 282 Q600 282 585 220 Z" fill="#f8e9e5" stroke="#d05d47" stroke-width="3"/>
+  <text x="220" y="257" text-anchor="middle" font-size="30" font-weight="700" fill="#0d5c49">x + 3</text>
+  <text x="680" y="257" text-anchor="middle" font-size="30" font-weight="700" fill="#a23f2d">10</text>
+  <text x="450" y="370" text-anchor="middle" font-size="24" fill="#17221e">两边同时减 3：x + 3 - 3 = 10 - 3</text>
+  <text x="450" y="408" text-anchor="middle" font-size="27" font-weight="700" fill="#167d63">x = 7</text>
+</svg>

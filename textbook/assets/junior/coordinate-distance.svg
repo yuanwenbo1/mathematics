@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" width="800" height="520" font-family="Segoe UI, PingFang SC, Microsoft YaHei, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">坐标系中两点距离</title>
+  <desc id="desc">原点A到点B三四的连线与横竖方向构成三四五直角三角形。</desc>
+  <rect width="800" height="520" fill="#ffffff"/>
+  <text x="400" y="46" text-anchor="middle" font-size="29" font-weight="700" fill="#17221e">距离公式来自勾股定理</text>
+  <g stroke="#e3e9e5" stroke-width="1">
+    <path d="M120 100V450M190 100V450M260 100V450M330 100V450M400 100V450M470 100V450M540 100V450M610 100V450M680 100V450"/>
+    <path d="M80 135H720M80 205H720M80 275H720M80 345H720M80 415H720"/>
+  </g>
+  <g stroke="#617069" stroke-width="3" fill="none">
+    <path d="M80 415H728l-16-9m16 9l-16 9"/>
+    <path d="M120 455V82l-9 16m9-16l9 16"/>
+  </g>
+  <text x="730" y="448" font-size="20" fill="#617069">x</text>
+  <text x="91" y="90" font-size="20" fill="#617069">y</text>
+  <path d="M120 415 L330 415 L330 135 Z" fill="#e4f2ed" fill-opacity="0.7" stroke="#167d63" stroke-width="4"/>
+  <line x1="120" y1="415" x2="330" y2="135" stroke="#d05d47" stroke-width="6"/>
+  <circle cx="120" cy="415" r="8" fill="#17221e"/><circle cx="330" cy="135" r="8" fill="#17221e"/>
+  <path d="M302 415v-28h28" fill="none" stroke="#617069" stroke-width="3"/>
+  <text x="92" y="446" font-size="21" fill="#17221e">A(0,0)</text>
+  <text x="347" y="130" font-size="21" fill="#17221e">B(3,4)</text>
+  <text x="225" y="447" text-anchor="middle" font-size="22" fill="#167d63">Δx = 3</text>
+  <text x="356" y="286" font-size="22" fill="#167d63">Δy = 4</text>
+  <text x="202" y="276" transform="rotate(-53 202 276)" font-size="24" font-weight="700" fill="#d05d47">d = 5</text>
+</svg>

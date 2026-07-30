@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420" font-family="Segoe UI, PingFang SC, Microsoft YaHei, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">按二比三分配五十</title>
+  <desc id="desc">五个相等格子表示总共五份，前两份和后三份分别对应二十和三十。</desc>
+  <rect width="800" height="420" fill="#ffffff"/>
+  <text x="400" y="54" text-anchor="middle" font-size="30" font-weight="700" fill="#17221e">把 50 按 2:3 分配</text>
+  <text x="88" y="126" font-size="22" fill="#617069">总份数</text>
+  <text x="200" y="126" font-size="22" font-weight="700" fill="#17221e">2 + 3 = 5</text>
+  <g transform="translate(100 165)">
+    <rect width="240" height="100" rx="4" fill="#167d63"/>
+    <rect x="240" width="360" height="100" rx="4" fill="#d05d47"/>
+    <g stroke="#ffffff" stroke-width="3">
+      <line x1="120" y1="0" x2="120" y2="100"/>
+      <line x1="240" y1="0" x2="240" y2="100"/>
+      <line x1="360" y1="0" x2="360" y2="100"/>
+      <line x1="480" y1="0" x2="480" y2="100"/>
+    </g>
+    <text x="120" y="61" text-anchor="middle" font-size="25" font-weight="700" fill="#ffffff">2 份 = 20</text>
+    <text x="420" y="61" text-anchor="middle" font-size="25" font-weight="700" fill="#ffffff">3 份 = 30</text>
+  </g>
+  <text x="400" y="330" text-anchor="middle" font-size="23" fill="#17221e">每份：50 / 5 = 10</text>
+  <text x="400" y="372" text-anchor="middle" font-size="23" fill="#617069">20 + 30 = 50</text>
+</svg>

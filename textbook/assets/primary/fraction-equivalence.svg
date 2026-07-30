@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420" font-family="Segoe UI, PingFang SC, Microsoft YaHei, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">等值分数二分之一等于四分之二</title>
+  <desc id="desc">上下两条等长色带分别分成两份和四份，涂色部分长度相同。</desc>
+  <rect width="800" height="420" fill="#ffffff"/>
+  <text x="400" y="52" text-anchor="middle" font-size="30" font-weight="700" fill="#17221e">1/2 = 2/4</text>
+  <text x="78" y="126" font-size="22" fill="#617069">分成 2 份</text>
+  <rect x="230" y="92" width="480" height="72" rx="4" fill="#eef3f0" stroke="#617069" stroke-width="2"/>
+  <rect x="230" y="92" width="240" height="72" rx="4" fill="#167d63"/>
+  <line x1="470" y1="92" x2="470" y2="164" stroke="#ffffff" stroke-width="3"/>
+  <text x="350" y="138" text-anchor="middle" font-size="24" font-weight="700" fill="#ffffff">1 份</text>
+  <text x="590" y="138" text-anchor="middle" font-size="24" fill="#617069">1 份</text>
+  <text x="78" y="273" font-size="22" fill="#617069">分成 4 份</text>
+  <rect x="230" y="238" width="480" height="72" rx="4" fill="#eef3f0" stroke="#617069" stroke-width="2"/>
+  <rect x="230" y="238" width="240" height="72" rx="4" fill="#167d63"/>
+  <g stroke="#ffffff" stroke-width="3">
+    <line x1="350" y1="238" x2="350" y2="310"/>
+    <line x1="470" y1="238" x2="470" y2="310"/>
+    <line x1="590" y1="238" x2="590" y2="310"/>
+  </g>
+  <text x="350" y="284" text-anchor="middle" font-size="24" font-weight="700" fill="#ffffff">2 份</text>
+  <path d="M230 340 v18 h240 v-18" fill="none" stroke="#d05d47" stroke-width="4"/>
+  <text x="350" y="392" text-anchor="middle" font-size="21" fill="#d05d47">涂色长度相同，表示同一个数</text>
+</svg>

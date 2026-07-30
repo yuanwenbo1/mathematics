@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="900" height="420" font-family="Segoe UI, PingFang SC, Microsoft YaHei, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">条形图折线图和扇形图的用途</title>
+  <desc id="desc">三个并列小图分别展示比较类别、观察趋势和表示组成。</desc>
+  <rect width="900" height="420" fill="#ffffff"/>
+  <text x="450" y="46" text-anchor="middle" font-size="29" font-weight="700" fill="#17221e">先看问题，再选图表</text>
+  <g transform="translate(40 82)">
+    <rect width="250" height="286" rx="6" fill="#f6f8f7" stroke="#dce4df"/>
+    <text x="125" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#17221e">比较类别</text>
+    <line x1="42" y1="230" x2="215" y2="230" stroke="#617069" stroke-width="2"/>
+    <rect x="62" y="148" width="34" height="82" fill="#167d63"/>
+    <rect x="116" y="103" width="34" height="127" fill="#d05d47"/>
+    <rect x="170" y="174" width="34" height="56" fill="#a77713"/>
+    <text x="125" y="270" text-anchor="middle" font-size="19" fill="#617069">条形图</text>
+  </g>
+  <g transform="translate(325 82)">
+    <rect width="250" height="286" rx="6" fill="#f6f8f7" stroke="#dce4df"/>
+    <text x="125" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#17221e">观察趋势</text>
+    <line x1="38" y1="230" x2="215" y2="230" stroke="#617069" stroke-width="2"/>
+    <line x1="38" y1="230" x2="38" y2="78" stroke="#617069" stroke-width="2"/>
+    <polyline points="45,202 88,170 130,184 173,112 210,88" fill="none" stroke="#167d63" stroke-width="5"/>
+    <g fill="#d05d47"><circle cx="45" cy="202" r="6"/><circle cx="88" cy="170" r="6"/><circle cx="130" cy="184" r="6"/><circle cx="173" cy="112" r="6"/><circle cx="210" cy="88" r="6"/></g>
+    <text x="125" y="270" text-anchor="middle" font-size="19" fill="#617069">折线图</text>
+  </g>
+  <g transform="translate(610 82)">
+    <rect width="250" height="286" rx="6" fill="#f6f8f7" stroke="#dce4df"/>
+    <text x="125" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#17221e">表示组成</text>
+    <circle cx="125" cy="154" r="68" fill="#167d63"/>
+    <path d="M125 154 L125 86 A68 68 0 0 1 183.9 188 Z" fill="#d05d47"/>
+    <path d="M125 154 L183.9 188 A68 68 0 0 1 125 222 Z" fill="#a77713"/>
+    <line x1="125" y1="154" x2="125" y2="86" stroke="#ffffff" stroke-width="2"/>
+    <text x="125" y="270" text-anchor="middle" font-size="19" fill="#617069">扇形图</text>
+  </g>
+</svg>

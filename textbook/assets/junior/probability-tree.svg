@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" width="900" height="460" font-family="Segoe UI, PingFang SC, Microsoft YaHei, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">抛两枚硬币的概率树</title>
+  <desc id="desc">两次抛硬币每次分正反两支，共得到四个等可能结果，其中一正一反有两个。</desc>
+  <rect width="900" height="460" fill="#ffffff"/>
+  <text x="450" y="48" text-anchor="middle" font-size="29" font-weight="700" fill="#17221e">树状图保证结果不重不漏</text>
+  <circle cx="100" cy="230" r="12" fill="#17221e"/>
+  <g fill="none" stroke="#617069" stroke-width="4">
+    <path d="M112 230 L300 125 M112 230 L300 335"/>
+    <path d="M312 125 L535 76 M312 125 L535 174"/>
+    <path d="M312 335 L535 286 M312 335 L535 384"/>
+  </g>
+  <g font-size="22" font-weight="700">
+    <text x="210" y="150" fill="#167d63">正 1/2</text><text x="210" y="322" fill="#d05d47">反 1/2</text>
+    <text x="408" y="82" fill="#167d63">正 1/2</text><text x="408" y="170" fill="#d05d47">反 1/2</text>
+    <text x="408" y="292" fill="#167d63">正 1/2</text><text x="408" y="380" fill="#d05d47">反 1/2</text>
+  </g>
+  <g font-size="23" font-weight="700">
+    <rect x="570" y="47" width="160" height="54" rx="5" fill="#eef3f0"/><text x="650" y="82" text-anchor="middle" fill="#17221e">正正</text>
+    <rect x="570" y="145" width="160" height="54" rx="5" fill="#e4f2ed" stroke="#167d63"/><text x="650" y="180" text-anchor="middle" fill="#0d5c49">正反</text>
+    <rect x="570" y="257" width="160" height="54" rx="5" fill="#e4f2ed" stroke="#167d63"/><text x="650" y="292" text-anchor="middle" fill="#0d5c49">反正</text>
+    <rect x="570" y="355" width="160" height="54" rx="5" fill="#eef3f0"/><text x="650" y="390" text-anchor="middle" fill="#17221e">反反</text>
+  </g>
+  <text x="805" y="230" text-anchor="middle" font-size="23" fill="#167d63">恰有一正</text>
+  <text x="805" y="265" text-anchor="middle" font-size="27" font-weight="700" fill="#167d63">2/4 = 1/2</text>
+</svg>

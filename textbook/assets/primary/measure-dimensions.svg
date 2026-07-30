@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="900" height="420" font-family="Segoe UI, PingFang SC, Microsoft YaHei, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">长度面积和体积的维度区别</title>
+  <desc id="desc">线段、长方形和长方体分别表示一维长度、二维面积和三维体积。</desc>
+  <rect width="900" height="420" fill="#ffffff"/>
+  <text x="450" y="48" text-anchor="middle" font-size="29" font-weight="700" fill="#17221e">长度、面积、体积不是一回事</text>
+  <g transform="translate(55 90)">
+    <text x="110" y="35" text-anchor="middle" font-size="22" font-weight="700" fill="#17221e">一维：长度</text>
+    <line x1="28" y1="136" x2="192" y2="136" stroke="#167d63" stroke-width="8"/>
+    <line x1="28" y1="119" x2="28" y2="153" stroke="#17221e" stroke-width="3"/>
+    <line x1="192" y1="119" x2="192" y2="153" stroke="#17221e" stroke-width="3"/>
+    <text x="110" y="192" text-anchor="middle" font-size="20" fill="#617069">单位：m</text>
+  </g>
+  <g transform="translate(330 90)">
+    <text x="110" y="35" text-anchor="middle" font-size="22" font-weight="700" fill="#17221e">二维：面积</text>
+    <rect x="28" y="74" width="164" height="124" fill="#e4f2ed" stroke="#167d63" stroke-width="4"/>
+    <path d="M69 74v124M110 74v124M151 74v124M28 115h164M28 156h164" stroke="#ffffff" stroke-width="2"/>
+    <text x="110" y="238" text-anchor="middle" font-size="20" fill="#617069">单位：m²</text>
+  </g>
+  <g transform="translate(625 90)">
+    <text x="110" y="35" text-anchor="middle" font-size="22" font-weight="700" fill="#17221e">三维：体积</text>
+    <path d="M35 103 L147 103 L190 70 L78 70 Z" fill="#eef3f0" stroke="#167d63" stroke-width="3"/>
+    <path d="M147 103 L190 70 L190 178 L147 211 Z" fill="#cfe8df" stroke="#167d63" stroke-width="3"/>
+    <rect x="35" y="103" width="112" height="108" fill="#e4f2ed" stroke="#167d63" stroke-width="3"/>
+    <text x="110" y="253" text-anchor="middle" font-size="20" fill="#617069">单位：m³</text>
+  </g>
+</svg>
