@@ -13,7 +13,7 @@ search: false
     <p class="intro-lead">面向所有想系统自学数学的学生，从中国小学、初中和高中课程开始，继续通向大学数学、证明训练和研究方向。按知识依赖学习，每一步都有讲解、例题、练习和验收。</p>
     <div class="intro-actions">
       <a class="button primary" id="continue-learning" href="{{ '/books/prelude/' | relative_url }}">从小学数学开始 <span>→</span></a>
-      <a class="button secondary" href="{{ '/guide/' | relative_url }}">查看学习方法</a>
+      <a class="button secondary" href="{{ '/continuity/' | relative_url }}">查看连续学习路线</a>
     </div>
   </div>
 </section>

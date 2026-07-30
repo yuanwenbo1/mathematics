@@ -97,6 +97,8 @@ stages:
         url: /books/professional/
 
 guides:
+  - title: 中小学连续学习路线
+    url: /continuity/
   - title: 中国中小学课程覆盖索引
     url: /k12-coverage/
   - title: 学习路径
