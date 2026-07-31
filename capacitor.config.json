@@ -5,7 +5,7 @@
   "server": {
     "hostname": "localhost",
     "androidScheme": "https",
-    "appStartPath": "/mathematics/"
+    "appStartPath": "/mathematics/index.html"
   },
   "android": {
     "allowMixedContent": false

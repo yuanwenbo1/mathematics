@@ -1,4 +1,8 @@
-import { Capacitor, CapacitorHttp } from "@capacitor/core";
+(() => {
+"use strict";
+
+const Capacitor = window.Capacitor || { isNativePlatform: () => false, Plugins: {} };
+const CapacitorHttp = Capacitor.Plugins?.CapacitorHttp;
 
 const DATABASE_NAME = "mathematics-offline-content";
 const DATABASE_VERSION = 1;
@@ -42,6 +46,17 @@ const isTrustedUpdateUrl = (value) => {
     return url.origin === TRUSTED_ORIGIN && url.pathname.startsWith(TRUSTED_PATH);
   } catch (_error) {
     return false;
+  }
+};
+
+const toNativePageUrl = (value) => {
+  if (!isNativeApp || typeof value !== "string") return value;
+  try {
+    const url = new URL(value, TRUSTED_ORIGIN);
+    if (url.origin !== TRUSTED_ORIGIN || !url.pathname.startsWith(TRUSTED_PATH) || !url.pathname.endsWith("/")) return value;
+    return `${url.pathname}index.html${url.search}${url.hash}`;
+  } catch (_error) {
+    return value;
   }
 };
 
@@ -93,11 +108,17 @@ const sanitizeDownloadedHtml = (html) => {
       if (/^(javascript|vbscript|data:text\/html):/i.test(value)) element.removeAttribute(name);
     });
   });
+  template.content.querySelectorAll("a[href]").forEach((element) => {
+    element.setAttribute("href", toNativePageUrl(element.getAttribute("href")));
+  });
   return template.content;
 };
 
 const applyPack = (pack) => {
-  window.__APP_CONTENT_PACK__ = pack;
+  window.__APP_CONTENT_PACK__ = {
+    ...pack,
+    searchIndex: pack.searchIndex.map((item) => ({ ...item, url: toNativePageUrl(item.url) }))
+  };
   const page = pack.pages[normalizePath(window.location.pathname)];
   const main = document.getElementById("main-content");
   if (!page || !main || typeof page.html !== "string") return;
@@ -264,3 +285,4 @@ const setupNativeUpdates = async () => {
 
 window.AppContentUpdater = { checkForUpdate, downloadUpdate, isNativeApp };
 setupNativeUpdates().catch((error) => console.error("Unable to initialize textbook updates:", error));
+})();

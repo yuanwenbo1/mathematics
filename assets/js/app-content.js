@@ -1,6 +1,288 @@
-(()=>{var A;(function(e){e.Unimplemented="UNIMPLEMENTED",e.Unavailable="UNAVAILABLE"})(A||(A={}));var P=class extends Error{constructor(t,n,r){super(t),this.message=t,this.code=n,this.data=r}},me=e=>{var t,n;return e?.androidBridge?"android":!((n=(t=e?.webkit)===null||t===void 0?void 0:t.messageHandlers)===null||n===void 0)&&n.bridge?"ios":"web"},pe=e=>{let t=e.CapacitorCustomPlatform||null,n=e.Capacitor||{},r=n.Plugins=n.Plugins||{},s=()=>t!==null?t.name:me(e),o=()=>s()!=="web",i=a=>{let c=p.get(a);return!!(c?.platforms.has(s())||l(a))},l=a=>{var c;return(c=n.PluginHeaders)===null||c===void 0?void 0:c.find(_=>_.name===a)},u=a=>e.console.error(a),p=new Map,T=(a,c={})=>{let _=p.get(a);if(_)return console.warn(`Capacitor plugin "${a}" already registered. Cannot register plugins twice.`),_.proxy;let v=s(),E=l(a),b,fe=async()=>(!b&&v in c?b=typeof c[v]=="function"?b=await c[v]():b=c[v]:t!==null&&!b&&"web"in c&&(b=typeof c.web=="function"?b=await c.web():b=c.web),b),he=(d,f)=>{var m,g;if(E){let y=E?.methods.find(h=>f===h.name);if(y)return y.rtype==="promise"?h=>n.nativePromise(a,f.toString(),h):(h,S)=>n.nativeCallback(a,f.toString(),h,S);if(d)return(m=d[f])===null||m===void 0?void 0:m.bind(d)}else{if(d)return(g=d[f])===null||g===void 0?void 0:g.bind(d);throw new P(`"${a}" plugin is not implemented on ${v}`,A.Unimplemented)}},D=d=>{let f,m=(...g)=>{let y=fe().then(h=>{let S=he(h,d);if(S){let O=S(...g);return f=O?.remove,O}else throw new P(`"${a}.${d}()" is not implemented on ${v}`,A.Unimplemented)});return d==="addListener"&&(y.remove=async()=>f()),y};return m.toString=()=>`${d.toString()}() { [capacitor code] }`,Object.defineProperty(m,"name",{value:d,writable:!1,configurable:!1}),m},W=D("addListener"),J=D("removeListener"),we=(d,f)=>{let m=W({eventName:d},f),g=async()=>{let h=await m;J({eventName:d,callbackId:h},f)},y=new Promise(h=>m.then(()=>h({remove:g})));return y.remove=async()=>{console.warn("Using addListener() without 'await' is deprecated."),await g()},y},B=new Proxy({},{get(d,f){switch(f){case"$$typeof":return;case"toJSON":return()=>({});case"addListener":return E?we:W;case"removeListener":return J;default:return D(f)}}});return r[a]=B,p.set(a,{name:a,proxy:B,platforms:new Set([...Object.keys(c),...E?[v]:[]])}),B};return n.convertFileSrc||(n.convertFileSrc=a=>a),n.getPlatform=s,n.handleError=u,n.isNativePlatform=o,n.isPluginAvailable=i,n.registerPlugin=T,n.Exception=P,n.DEBUG=!!n.DEBUG,n.isLoggingEnabled=!!n.isLoggingEnabled,n},be=e=>e.Capacitor=pe(e),C=be(typeof globalThis<"u"?globalThis:typeof self<"u"?self:typeof window<"u"?window:typeof global<"u"?global:{}),V=C.registerPlugin,U=class{constructor(){this.listeners={},this.retainedEventArguments={},this.windowListeners={}}addListener(t,n){let r=!1;this.listeners[t]||(this.listeners[t]=[],r=!0),this.listeners[t].push(n);let o=this.windowListeners[t];o&&!o.registered&&this.addWindowListener(o),r&&this.sendRetainedArgumentsForEvent(t);let i=async()=>this.removeListener(t,n);return Promise.resolve({remove:i})}async removeAllListeners(){this.listeners={};for(let t in this.windowListeners)this.removeWindowListener(this.windowListeners[t]);this.windowListeners={}}notifyListeners(t,n,r){let s=this.listeners[t];if(!s){if(r){let o=this.retainedEventArguments[t];o||(o=[]),o.push(n),this.retainedEventArguments[t]=o}return}s.forEach(o=>o(n))}hasListeners(t){var n;return!!(!((n=this.listeners[t])===null||n===void 0)&&n.length)}registerWindowListener(t,n){this.windowListeners[n]={registered:!1,windowEventName:t,pluginEventName:n,handler:r=>{this.notifyListeners(n,r)}}}unimplemented(t="not implemented"){return new C.Exception(t,A.Unimplemented)}unavailable(t="not available"){return new C.Exception(t,A.Unavailable)}async removeListener(t,n){let r=this.listeners[t];if(!r)return;let s=r.indexOf(n);this.listeners[t].splice(s,1),this.listeners[t].length||this.removeWindowListener(this.windowListeners[t])}addWindowListener(t){window.addEventListener(t.windowEventName,t.handler),t.registered=!0}removeWindowListener(t){t&&(window.removeEventListener(t.windowEventName,t.handler),t.registered=!1)}sendRetainedArgumentsForEvent(t){let n=this.retainedEventArguments[t];n&&(delete this.retainedEventArguments[t],n.forEach(r=>{this.notifyListeners(t,r)}))}};var Y=e=>encodeURIComponent(e).replace(/%(2[346B]|5E|60|7C)/g,decodeURIComponent).replace(/[()]/g,escape),X=e=>e.replace(/(%[\dA-F]{2})+/gi,decodeURIComponent),I=class extends U{async getCookies(){let t=document.cookie,n={};return t.split(";").forEach(r=>{if(r.length<=0)return;let[s,o]=r.replace(/=/,"CAP_COOKIE").split("CAP_COOKIE");s=X(s).trim(),o=X(o).trim(),n[s]=o}),n}async setCookie(t){try{let n=Y(t.key),r=Y(t.value),s=t.expires?`; expires=${t.expires.replace("expires=","")}`:"",o=(t.path||"/").replace("path=",""),i=t.url!=null&&t.url.length>0?`domain=${t.url}`:"";document.cookie=`${n}=${r||""}${s}; path=${o}; ${i};`}catch(n){return Promise.reject(n)}}async deleteCookie(t){try{document.cookie=`${t.key}=; Max-Age=0`}catch(n){return Promise.reject(n)}}async clearCookies(){try{let t=document.cookie.split(";")||[];for(let n of t)document.cookie=n.replace(/^ +/,"").replace(/=.*/,`=;expires=${new Date().toUTCString()};path=/`)}catch(t){return Promise.reject(t)}}async clearAllCookies(){try{await this.clearCookies()}catch(t){return Promise.reject(t)}}},Ie=V("CapacitorCookies",{web:()=>new I}),ge=async e=>new Promise((t,n)=>{let r=new FileReader;r.onload=()=>{let s=r.result;t(s.indexOf(",")>=0?s.split(",")[1]:s)},r.onerror=s=>n(s),r.readAsDataURL(e)}),ye=(e={})=>{let t=Object.keys(e);return Object.keys(e).map(s=>s.toLocaleLowerCase()).reduce((s,o,i)=>(s[o]=e[t[i]],s),{})},ve=(e,t=!0)=>e?Object.entries(e).reduce((r,s)=>{let[o,i]=s,l,u;return Array.isArray(i)?(u="",i.forEach(p=>{l=t?encodeURIComponent(p):p,u+=`${o}=${l}&`}),u.slice(0,-1)):(l=t?encodeURIComponent(i):i,u=`${o}=${l}`),`${r}&${u}`},"").substr(1):null,Ee=(e,t={})=>{let n=Object.assign({method:e.method||"GET",headers:e.headers},t),s=ye(e.headers)["content-type"]||"";if(typeof e.data=="string")n.body=e.data;else if(s.includes("application/x-www-form-urlencoded")){let o=new URLSearchParams;for(let[i,l]of Object.entries(e.data||{}))o.set(i,l);n.body=o.toString()}else if(s.includes("multipart/form-data")||e.data instanceof FormData){let o=new FormData;if(e.data instanceof FormData)e.data.forEach((l,u)=>{o.append(u,l)});else for(let l of Object.keys(e.data))o.append(l,e.data[l]);n.body=o;let i=new Headers(n.headers);i.delete("content-type"),n.headers=i}else(s.includes("application/json")||typeof e.data=="object")&&(n.body=JSON.stringify(e.data));return n},R=class extends U{async request(t){let n=Ee(t,t.webFetchExtra),r=ve(t.params,t.shouldEncodeUrlParams),s=r?`${t.url}?${r}`:t.url,o=await fetch(s,n),i=o.headers.get("content-type")||"",{responseType:l="text"}=o.ok?t:{};i.includes("application/json")&&(l="json");let u,p;switch(l){case"arraybuffer":case"blob":p=await o.blob(),u=await ge(p);break;case"json":u=await o.json();break;default:u=await o.text()}let T={};return o.headers.forEach((a,c)=>{T[c]=a}),{data:u,headers:T,status:o.status,url:o.url}}async get(t){return this.request(Object.assign(Object.assign({},t),{method:"GET"}))}async post(t){return this.request(Object.assign(Object.assign({},t),{method:"POST"}))}async put(t){return this.request(Object.assign(Object.assign({},t),{method:"PUT"}))}async patch(t){return this.request(Object.assign(Object.assign({},t),{method:"PATCH"}))}async delete(t){return this.request(Object.assign(Object.assign({},t),{method:"DELETE"}))}},ee=V("CapacitorHttp",{web:()=>new R}),Z;(function(e){e.Dark="DARK",e.Light="LIGHT",e.Default="DEFAULT"})(Z||(Z={}));var Q;(function(e){e.StatusBar="StatusBar",e.NavigationBar="NavigationBar"})(Q||(Q={}));var H=class extends U{async setStyle(){this.unavailable("not available for web")}async setAnimation(){this.unavailable("not available for web")}async show(){this.unavailable("not available for web")}async hide(){this.unavailable("not available for web")}},Re=V("SystemBars",{web:()=>new H});var Ae="mathematics-offline-content",Le=1,L="content",te="active-pack",Pe=30*1024*1024,Ce="https://yuanwenbo1.github.io",Ue="/mathematics/",x=C.isNativePlatform();window.__IS_NATIVE_APP__=x;var K=e=>document.querySelector(`meta[name="${e}"]`)?.content||"",ne=K("app-content-version")||"development",re=K("app-content-published-at")||"1970-01-01T00:00:00.000Z",$=K("app-content-endpoint"),ke=e=>e.endsWith("/index.html")?e.slice(0,-10):e||"/mathematics/",se=e=>/^[0-9a-f]{40}$/.test(e||""),oe=e=>Number.isFinite(Date.parse(e||"")),ae=e=>!!(e&&se(e.version)&&oe(e.publishedAt)&&e.pages&&typeof e.pages=="object"&&!Array.isArray(e.pages)&&Object.keys(e.pages).length>0&&Array.isArray(e.searchIndex)),N=e=>{try{let t=new URL(e);return t.origin===Ce&&t.pathname.startsWith(Ue)}catch{return!1}},ie=()=>new Promise((e,t)=>{let n=indexedDB.open(Ae,Le);n.addEventListener("upgradeneeded",()=>{n.result.objectStoreNames.contains(L)||n.result.createObjectStore(L)}),n.addEventListener("success",()=>e(n.result)),n.addEventListener("error",()=>t(n.error))}),xe=async()=>{let e=await ie();return new Promise((t,n)=>{let r=e.transaction(L,"readonly"),s=r.objectStore(L).get(te);s.addEventListener("success",()=>t(s.result||null)),s.addEventListener("error",()=>n(s.error)),r.addEventListener("complete",()=>e.close())})},Te=async e=>{let t=await ie();return new Promise((n,r)=>{let s=t.transaction(L,"readwrite");s.objectStore(L).put(e,te),s.addEventListener("complete",()=>{t.close(),n()}),s.addEventListener("abort",()=>r(s.error)),s.addEventListener("error",()=>r(s.error))})},_e=e=>{let t=document.createElement("template");return t.innerHTML=typeof e=="string"?e:"",t.content.querySelectorAll("script,style,iframe,object,embed,form").forEach(n=>n.remove()),t.content.querySelectorAll("*").forEach(n=>{Array.from(n.attributes).forEach(r=>{(/^on/i.test(r.name)||r.name==="srcdoc"||r.name==="style")&&n.removeAttribute(r.name)}),["href","src","action","formaction"].forEach(r=>{let s=n.getAttribute(r)?.trim()||"";/^(javascript|vbscript|data:text\/html):/i.test(s)&&n.removeAttribute(r)})}),t.content},Se=e=>{window.__APP_CONTENT_PACK__=e;let t=e.pages[ke(window.location.pathname)],n=document.getElementById("main-content");!t||!n||typeof t.html!="string"||(n.replaceChildren(_e(t.html).cloneNode(!0)),t.title&&(document.title=t.title),document.documentElement.dataset.contentVersion=e.version)},Oe=e=>!ae(e)||e.version===ne?null:Date.parse(e.publishedAt)>Date.parse(re)?e:null,$e=async()=>{if(!x)return null;let e=Oe(await xe());return e&&Se(e),e};window.__CONTENT_READY__=$e().catch(e=>(console.error("Unable to load stored textbook content:",e),null));var j=null,F=null,w=null,q=null,k=(e,t=!1)=>{let n=document.getElementById("pwa-status"),r=document.getElementById("pwa-status-message"),s=document.getElementById("pwa-update-button");!n||!r||!s||(r.textContent=e,s.hidden=!0,n.hidden=!1,q&&window.clearTimeout(q),q=t?null:window.setTimeout(()=>n.hidden=!0,5e3))},ce=async e=>{if(!N(e))throw new Error("Untrusted textbook update URL.");let t=await ee.get({url:e,connectTimeout:12e3,readTimeout:12e4,responseType:"json"});if(t.status<200||t.status>=300)throw new Error(`Update server returned ${t.status}.`);return typeof t.data=="string"?JSON.parse(t.data):t.data},le=()=>({version:F?.version||ne,publishedAt:F?.publishedAt||re}),de=e=>!!(e&&se(e.version)&&oe(e.publishedAt)&&Number.isInteger(e.pageCount)&&e.pageCount>0&&Number.isInteger(e.byteLength)&&e.byteLength>0&&e.byteLength<=Pe&&/^[0-9a-f]{64}$/.test(e.sha256||"")&&N(e.downloadUrl)),G=e=>{let t=le();return e.version===t.version?!1:Date.parse(e.publishedAt)>Date.parse(t.publishedAt)},M=e=>{w&&(w.textContent=e?"\u66F4\u65B0\u6559\u6750":"\u68C0\u67E5\u66F4\u65B0",w.classList.toggle("has-update",e),w.disabled=!1)},z=async({silent:e=!1}={})=>{if(!x||!$||!N($))return{available:!1};try{let t=$.includes("?")?"&":"?",n=await ce(`${$}${t}time=${Date.now()}`);if(!de(n))throw new Error("Invalid textbook version manifest.");j=n;let r=G(n);return M(r),e||k(r?"\u53D1\u73B0\u65B0\u7684\u6559\u6750\u7248\u672C":"\u6559\u6750\u5DF2\u662F\u6700\u65B0\u7248\u672C"),{available:r,info:n}}catch(t){return M(!1),e||k("\u65E0\u6CD5\u8FDE\u63A5\u66F4\u65B0\u670D\u52A1\u5668\uFF0C\u7EE7\u7EED\u4F7F\u7528\u672C\u5730\u6559\u6750"),console.error("Unable to check textbook updates:",t),{available:!1,error:t}}},je=async e=>{let t=new TextEncoder().encode(e),n=await window.crypto.subtle.digest("SHA-256",t);return Array.from(new Uint8Array(n),r=>r.toString(16).padStart(2,"0")).join("")},ue=async e=>{if(!de(e)||!G(e))return!1;w.disabled=!0,w.textContent="\u6B63\u5728\u66F4\u65B0",k("\u6B63\u5728\u4E0B\u8F7D\u5E76\u6821\u9A8C\u6559\u6750\u66F4\u65B0...",!0);try{let t=e.downloadUrl.includes("?")?"&":"?",n=await ce(`${e.downloadUrl}${t}version=${encodeURIComponent(e.version)}`);if(!ae(n)||n.version!==e.version||Object.keys(n.pages).length!==e.pageCount)throw new Error("Downloaded textbook pack is incomplete.");let r=JSON.stringify(n);if(new TextEncoder().encode(r).byteLength!==e.byteLength||await je(r)!==e.sha256)throw new Error("Downloaded textbook pack failed integrity verification.");return await Te(n),k("\u6559\u6750\u66F4\u65B0\u5B8C\u6210\uFF0C\u6B63\u5728\u91CD\u65B0\u8F7D\u5165...",!0),window.setTimeout(()=>window.location.reload(),800),!0}catch(t){return M(!0),k("\u6559\u6750\u66F4\u65B0\u5931\u8D25\uFF0C\u5DF2\u7EE7\u7EED\u4F7F\u7528\u539F\u6709\u79BB\u7EBF\u6559\u6750"),console.error("Unable to install textbook update:",t),!1}},De=async()=>{(!j||!G(j))&&!(await z({silent:!1})).available||await ue(j)},Be=async()=>{if(!x)return;document.documentElement.classList.add("native-app"),F=await window.__CONTENT_READY__,w=document.getElementById("app-update-button");let e=document.getElementById("pwa-install-button");e&&(e.hidden=!0),w&&(w.hidden=!1,w.title=`\u5F53\u524D\u6559\u6750\u7248\u672C ${le().version.slice(0,7)}`,w.addEventListener("click",De),await z({silent:!0}))};window.AppContentUpdater={checkForUpdate:z,downloadUpdate:ue,isNativeApp:x};Be().catch(e=>console.error("Unable to initialize textbook updates:",e));})();
-/*! Bundled license information:
+(() => {
+"use strict";
 
-@capacitor/core/dist/index.js:
-  (*! Capacitor: https://capacitorjs.com/ - MIT License *)
-*/
+const Capacitor = window.Capacitor || { isNativePlatform: () => false, Plugins: {} };
+const CapacitorHttp = Capacitor.Plugins?.CapacitorHttp;
+
+const DATABASE_NAME = "mathematics-offline-content";
+const DATABASE_VERSION = 1;
+const STORE_NAME = "content";
+const ACTIVE_PACK_KEY = "active-pack";
+const MAX_PACK_BYTES = 30 * 1024 * 1024;
+const TRUSTED_ORIGIN = "https://yuanwenbo1.github.io";
+const TRUSTED_PATH = "/mathematics/";
+const isNativeApp = Capacitor.isNativePlatform();
+
+window.__IS_NATIVE_APP__ = isNativeApp;
+
+const readMeta = (name) => document.querySelector(`meta[name="${name}"]`)?.content || "";
+const bundledVersion = readMeta("app-content-version") || "development";
+const bundledPublishedAt = readMeta("app-content-published-at") || "1970-01-01T00:00:00.000Z";
+const versionEndpoint = readMeta("app-content-endpoint");
+
+const normalizePath = (pathname) => {
+  if (pathname.endsWith("/index.html")) return pathname.slice(0, -"index.html".length);
+  return pathname || "/mathematics/";
+};
+
+const isValidVersion = (version) => /^[0-9a-f]{40}$/.test(version || "");
+const isValidDate = (value) => Number.isFinite(Date.parse(value || ""));
+
+const validatePack = (pack) =>
+  Boolean(
+    pack &&
+      isValidVersion(pack.version) &&
+      isValidDate(pack.publishedAt) &&
+      pack.pages &&
+      typeof pack.pages === "object" &&
+      !Array.isArray(pack.pages) &&
+      Object.keys(pack.pages).length > 0 &&
+      Array.isArray(pack.searchIndex)
+  );
+
+const isTrustedUpdateUrl = (value) => {
+  try {
+    const url = new URL(value);
+    return url.origin === TRUSTED_ORIGIN && url.pathname.startsWith(TRUSTED_PATH);
+  } catch (_error) {
+    return false;
+  }
+};
+
+const toNativePageUrl = (value) => {
+  if (!isNativeApp || typeof value !== "string") return value;
+  try {
+    const url = new URL(value, TRUSTED_ORIGIN);
+    if (url.origin !== TRUSTED_ORIGIN || !url.pathname.startsWith(TRUSTED_PATH) || !url.pathname.endsWith("/")) return value;
+    return `${url.pathname}index.html${url.search}${url.hash}`;
+  } catch (_error) {
+    return value;
+  }
+};
+
+const openDatabase = () =>
+  new Promise((resolve, reject) => {
+    const request = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
+    request.addEventListener("upgradeneeded", () => {
+      if (!request.result.objectStoreNames.contains(STORE_NAME)) request.result.createObjectStore(STORE_NAME);
+    });
+    request.addEventListener("success", () => resolve(request.result));
+    request.addEventListener("error", () => reject(request.error));
+  });
+
+const readStoredPack = async () => {
+  const database = await openDatabase();
+  return new Promise((resolve, reject) => {
+    const transaction = database.transaction(STORE_NAME, "readonly");
+    const request = transaction.objectStore(STORE_NAME).get(ACTIVE_PACK_KEY);
+    request.addEventListener("success", () => resolve(request.result || null));
+    request.addEventListener("error", () => reject(request.error));
+    transaction.addEventListener("complete", () => database.close());
+  });
+};
+
+const storePack = async (pack) => {
+  const database = await openDatabase();
+  return new Promise((resolve, reject) => {
+    const transaction = database.transaction(STORE_NAME, "readwrite");
+    transaction.objectStore(STORE_NAME).put(pack, ACTIVE_PACK_KEY);
+    transaction.addEventListener("complete", () => {
+      database.close();
+      resolve();
+    });
+    transaction.addEventListener("abort", () => reject(transaction.error));
+    transaction.addEventListener("error", () => reject(transaction.error));
+  });
+};
+
+const sanitizeDownloadedHtml = (html) => {
+  const template = document.createElement("template");
+  template.innerHTML = typeof html === "string" ? html : "";
+  template.content.querySelectorAll("script,style,iframe,object,embed,form").forEach((element) => element.remove());
+  template.content.querySelectorAll("*").forEach((element) => {
+    Array.from(element.attributes).forEach((attribute) => {
+      if (/^on/i.test(attribute.name) || attribute.name === "srcdoc" || attribute.name === "style") element.removeAttribute(attribute.name);
+    });
+    ["href", "src", "action", "formaction"].forEach((name) => {
+      const value = element.getAttribute(name)?.trim() || "";
+      if (/^(javascript|vbscript|data:text\/html):/i.test(value)) element.removeAttribute(name);
+    });
+  });
+  template.content.querySelectorAll("a[href]").forEach((element) => {
+    element.setAttribute("href", toNativePageUrl(element.getAttribute("href")));
+  });
+  return template.content;
+};
+
+const applyPack = (pack) => {
+  window.__APP_CONTENT_PACK__ = {
+    ...pack,
+    searchIndex: pack.searchIndex.map((item) => ({ ...item, url: toNativePageUrl(item.url) }))
+  };
+  const page = pack.pages[normalizePath(window.location.pathname)];
+  const main = document.getElementById("main-content");
+  if (!page || !main || typeof page.html !== "string") return;
+  main.replaceChildren(sanitizeDownloadedHtml(page.html).cloneNode(true));
+  if (page.title) document.title = page.title;
+  document.documentElement.dataset.contentVersion = pack.version;
+};
+
+const selectActivePack = (pack) => {
+  if (!validatePack(pack)) return null;
+  if (pack.version === bundledVersion) return null;
+  return Date.parse(pack.publishedAt) > Date.parse(bundledPublishedAt) ? pack : null;
+};
+
+const loadActiveContent = async () => {
+  if (!isNativeApp) return null;
+  const pack = selectActivePack(await readStoredPack());
+  if (pack) applyPack(pack);
+  return pack;
+};
+
+window.__CONTENT_READY__ = loadActiveContent().catch((error) => {
+  console.error("Unable to load stored textbook content:", error);
+  return null;
+});
+
+let latestInfo = null;
+let activePack = null;
+let updateButton = null;
+let statusTimer = null;
+
+const showStatus = (message, persistent = false) => {
+  const status = document.getElementById("pwa-status");
+  const messageElement = document.getElementById("pwa-status-message");
+  const pwaUpdateButton = document.getElementById("pwa-update-button");
+  if (!status || !messageElement || !pwaUpdateButton) return;
+  messageElement.textContent = message;
+  pwaUpdateButton.hidden = true;
+  status.hidden = false;
+  if (statusTimer) window.clearTimeout(statusTimer);
+  statusTimer = persistent ? null : window.setTimeout(() => (status.hidden = true), 5000);
+};
+
+const nativeGet = async (url) => {
+  if (!isTrustedUpdateUrl(url)) throw new Error("Untrusted textbook update URL.");
+  const response = await CapacitorHttp.get({
+    url,
+    connectTimeout: 12000,
+    readTimeout: 120000,
+    responseType: "json"
+  });
+  if (response.status < 200 || response.status >= 300) throw new Error(`Update server returned ${response.status}.`);
+  return typeof response.data === "string" ? JSON.parse(response.data) : response.data;
+};
+
+const currentContent = () => ({
+  version: activePack?.version || bundledVersion,
+  publishedAt: activePack?.publishedAt || bundledPublishedAt
+});
+
+const validateVersionInfo = (info) =>
+  Boolean(
+    info &&
+      isValidVersion(info.version) &&
+      isValidDate(info.publishedAt) &&
+      Number.isInteger(info.pageCount) &&
+      info.pageCount > 0 &&
+      Number.isInteger(info.byteLength) &&
+      info.byteLength > 0 &&
+      info.byteLength <= MAX_PACK_BYTES &&
+      /^[0-9a-f]{64}$/.test(info.sha256 || "") &&
+      isTrustedUpdateUrl(info.downloadUrl)
+  );
+
+const hasNewerContent = (info) => {
+  const current = currentContent();
+  if (info.version === current.version) return false;
+  return Date.parse(info.publishedAt) > Date.parse(current.publishedAt);
+};
+
+const setButtonState = (hasUpdate) => {
+  if (!updateButton) return;
+  updateButton.textContent = hasUpdate ? "更新教材" : "检查更新";
+  updateButton.classList.toggle("has-update", hasUpdate);
+  updateButton.disabled = false;
+};
+
+const checkForUpdate = async ({ silent = false } = {}) => {
+  if (!isNativeApp || !versionEndpoint || !isTrustedUpdateUrl(versionEndpoint)) return { available: false };
+  try {
+    const separator = versionEndpoint.includes("?") ? "&" : "?";
+    const info = await nativeGet(`${versionEndpoint}${separator}time=${Date.now()}`);
+    if (!validateVersionInfo(info)) throw new Error("Invalid textbook version manifest.");
+    latestInfo = info;
+    const available = hasNewerContent(info);
+    setButtonState(available);
+    if (!silent) showStatus(available ? "发现新的教材版本" : "教材已是最新版本");
+    return { available, info };
+  } catch (error) {
+    setButtonState(false);
+    if (!silent) showStatus("无法连接更新服务器，继续使用本地教材");
+    console.error("Unable to check textbook updates:", error);
+    return { available: false, error };
+  }
+};
+
+const sha256 = async (value) => {
+  const bytes = new TextEncoder().encode(value);
+  const digest = await window.crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+};
+
+const downloadUpdate = async (info) => {
+  if (!validateVersionInfo(info) || !hasNewerContent(info)) return false;
+  updateButton.disabled = true;
+  updateButton.textContent = "正在更新";
+  showStatus("正在下载并校验教材更新...", true);
+
+  try {
+    const separator = info.downloadUrl.includes("?") ? "&" : "?";
+    const pack = await nativeGet(`${info.downloadUrl}${separator}version=${encodeURIComponent(info.version)}`);
+    if (!validatePack(pack) || pack.version !== info.version || Object.keys(pack.pages).length !== info.pageCount) {
+      throw new Error("Downloaded textbook pack is incomplete.");
+    }
+
+    const serialized = JSON.stringify(pack);
+    if (new TextEncoder().encode(serialized).byteLength !== info.byteLength || (await sha256(serialized)) !== info.sha256) {
+      throw new Error("Downloaded textbook pack failed integrity verification.");
+    }
+
+    await storePack(pack);
+    showStatus("教材更新完成，正在重新载入...", true);
+    window.setTimeout(() => window.location.reload(), 800);
+    return true;
+  } catch (error) {
+    setButtonState(true);
+    showStatus("教材更新失败，已继续使用原有离线教材");
+    console.error("Unable to install textbook update:", error);
+    return false;
+  }
+};
+
+const handleUpdateClick = async () => {
+  if (!latestInfo || !hasNewerContent(latestInfo)) {
+    const result = await checkForUpdate({ silent: false });
+    if (!result.available) return;
+  }
+  await downloadUpdate(latestInfo);
+};
+
+const setupNativeUpdates = async () => {
+  if (!isNativeApp) return;
+  document.documentElement.classList.add("native-app");
+  activePack = await window.__CONTENT_READY__;
+  updateButton = document.getElementById("app-update-button");
+  const installButton = document.getElementById("pwa-install-button");
+  if (installButton) installButton.hidden = true;
+  if (!updateButton) return;
+  updateButton.hidden = false;
+  updateButton.title = `当前教材版本 ${currentContent().version.slice(0, 7)}`;
+  updateButton.addEventListener("click", handleUpdateClick);
+  await checkForUpdate({ silent: true });
+};
+
+window.AppContentUpdater = { checkForUpdate, downloadUpdate, isNativeApp };
+setupNativeUpdates().catch((error) => console.error("Unable to initialize textbook updates:", error));
+})();

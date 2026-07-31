@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { mkdir, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { rewriteCapacitorSite } from "./rewrite-capacitor-site.mjs";
 
 const SITE_ORIGIN = "https://yuanwenbo1.github.io";
 const BASE_PATH = "/mathematics";
@@ -59,18 +60,6 @@ const outputPathForUrl = (urlString) => {
   return output;
 };
 
-const redirect = `<!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta http-equiv="refresh" content="0;url=/mathematics/">
-    <title>数学自学教材</title>
-  </head>
-  <body><a href="/mathematics/">打开数学自学教材</a></body>
-</html>
-`;
-
 await rm(stagingDir, { recursive: true, force: true });
 await mkdir(stagingDir, { recursive: true });
 try {
@@ -87,7 +76,7 @@ try {
     );
   }
 
-  await writeFile(path.join(stagingDir, "index.html"), redirect, "utf8");
+  await rewriteCapacitorSite(stagingDir);
   await rm(outputDir, { recursive: true, force: true });
   await rename(stagingDir, outputDir);
 } catch (error) {
