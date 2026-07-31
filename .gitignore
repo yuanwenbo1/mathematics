@@ -1,5 +1,6 @@
 _site/
 _site-app/
+_site-app.download/
 .jekyll-cache/
 .sass-cache/
 node_modules/
