@@ -4,7 +4,8 @@
   "webDir": "_site-app",
   "server": {
     "hostname": "localhost",
-    "androidScheme": "https"
+    "androidScheme": "https",
+    "appStartPath": "/mathematics/"
   },
   "android": {
     "allowMixedContent": false
