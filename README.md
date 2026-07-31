@@ -52,7 +52,7 @@ Android 应用使用 Capacitor 封装网站，并把发布时的全部教材、�
 
 应用导航中的“检查更新”会从 GitHub Pages 拉取最新教材包。下载前会核对发布版本、文件大小、页面数量和 SHA-256，校验失败时保留原有离线教材。更新包只包含教材正文、图片和搜索索引，不包含可执行脚本。
 
-本地构建需要 Node.js 22、JDK 17 和 Android SDK 36：
+本地构建需要 Node.js 22、JDK 21 和 Android SDK 36：
 
 ```powershell
 npm ci

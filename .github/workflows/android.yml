@@ -42,6 +42,12 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
       - name: Install build dependencies
         run: npm ci
 
@@ -65,7 +71,9 @@ jobs:
           destination: ./_site
 
       - name: Prepare Capacitor web assets
-        run: npm run app:prepare
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" _site
+          npm run app:prepare
 
       - name: Sync Android project
         run: npx cap sync android

@@ -51,7 +51,9 @@ jobs:
           destination: ./_site
 
       - name: Build downloadable textbook update
-        run: node scripts/build-content-pack.mjs --site=_site --baseurl=/mathematics --origin=https://yuanwenbo1.github.io --version=${{ github.sha }} --publishedAt="$CONTENT_PUBLISHED_AT"
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" _site
+          node scripts/build-content-pack.mjs --site=_site --baseurl=/mathematics --origin=https://yuanwenbo1.github.io --version=${{ github.sha }} --publishedAt="$CONTENT_PUBLISHED_AT"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
