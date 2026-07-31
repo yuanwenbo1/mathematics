@@ -21,6 +21,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install build dependencies
+        run: npm ci
+
+      - name: Prepare application runtime and content version
+        shell: bash
+        run: |
+          PUBLISHED_AT="$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"
+          echo "CONTENT_PUBLISHED_AT=$PUBLISHED_AT" >> "$GITHUB_ENV"
+          npm run build:runtime
+          node scripts/write-build-info.mjs --version=${{ github.sha }} --target=web --publishedAt="$PUBLISHED_AT"
+
+      - name: Test content update builder
+        run: npm test
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
@@ -29,6 +49,9 @@ jobs:
         with:
           source: ./
           destination: ./_site
+
+      - name: Build downloadable textbook update
+        run: node scripts/build-content-pack.mjs --site=_site --baseurl=/mathematics --origin=https://yuanwenbo1.github.io --version=${{ github.sha }} --publishedAt="$CONTENT_PUBLISHED_AT"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4

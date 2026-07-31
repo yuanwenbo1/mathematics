@@ -2,7 +2,7 @@
 <html lang="{{ site.lang | default: 'zh-CN' }}">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
     <meta name="description" content="{{ page.description | default: site.description }}">
     <meta name="theme-color" content="#167d63">
@@ -10,11 +10,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="数学教材">
+    <meta name="app-content-version" content="{{ site.data.build.version | default: 'development' }}">
+    <meta name="app-content-published-at" content="{{ site.data.build.published_at | default: '1970-01-01T00:00:00.000Z' }}">
+    <meta name="app-content-endpoint" content="{{ '/app-content-version.json' | absolute_url }}">
     <link rel="canonical" href="{{ page.url | absolute_url }}">
     <link rel="manifest" href="{{ '/manifest.webmanifest' | relative_url }}">
     <link rel="icon" href="{{ '/assets/icons/app-icon.svg' | relative_url }}" type="image/svg+xml">
     <link rel="apple-touch-icon" href="{{ '/assets/icons/apple-touch-icon.png' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+    <script src="{{ '/assets/js/app-content.js' | relative_url }}?v=20260731-app" defer></script>
   </head>
   <body class="layout-{{ page.layout | default: 'base' }}" data-baseurl="{{ site.baseurl }}">
     <div class="reading-meter" aria-hidden="true"><span id="reading-meter-value"></span></div>
@@ -39,6 +43,7 @@
             <a href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a>
           {% endfor %}
           <button class="pwa-install-button" id="pwa-install-button" type="button" hidden>安装应用</button>
+          <button class="app-update-button" id="app-update-button" type="button" hidden>检查更新</button>
         </nav>
       </div>
     </header>
@@ -74,6 +79,6 @@
       <button class="pwa-status-close" id="pwa-status-close" type="button" title="关闭通知" aria-label="关闭通知">&times;</button>
     </div>
 
-    <script src="{{ '/assets/js/site.js' | relative_url }}?v=20260730-pwa" defer></script>
+    <script src="{{ '/assets/js/site.js' | relative_url }}?v=20260731-app" defer></script>
   </body>
 </html>

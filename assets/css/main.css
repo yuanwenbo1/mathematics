@@ -29,6 +29,8 @@ html {
 body {
   min-width: 320px;
   margin: 0;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
   background: var(--bg);
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -84,7 +86,7 @@ img {
 .reading-meter {
   position: fixed;
   z-index: 100;
-  top: 0;
+  top: env(safe-area-inset-top);
   right: 0;
   left: 0;
   height: 3px;
@@ -101,7 +103,7 @@ img {
 .site-header {
   position: sticky;
   z-index: 40;
-  top: 0;
+  top: env(safe-area-inset-top);
   border-bottom: 1px solid rgba(220, 228, 223, 0.92);
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(14px);
@@ -182,7 +184,8 @@ img {
   color: var(--primary-dark);
 }
 
-.pwa-install-button {
+.pwa-install-button,
+.app-update-button {
   min-height: 36px;
   padding: 0 11px;
   border: 1px solid var(--primary);
@@ -194,13 +197,25 @@ img {
   font-weight: 750;
 }
 
-.pwa-install-button:hover {
+.pwa-install-button:hover,
+.app-update-button:hover {
   background: var(--primary-soft);
 }
 
-.pwa-install-button:disabled {
+.pwa-install-button:disabled,
+.app-update-button:disabled {
   cursor: wait;
   opacity: 0.6;
+}
+
+.app-update-button.has-update {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.native-app .pwa-install-button {
+  display: none;
 }
 
 .nav-toggle {
@@ -1291,7 +1306,7 @@ img {
   .book-menu-button {
     position: sticky;
     z-index: 30;
-    top: var(--header-height);
+    top: calc(var(--header-height) + env(safe-area-inset-top));
     display: flex;
     width: 100%;
     min-height: 42px;
@@ -1370,7 +1385,8 @@ img {
     padding: 10px 12px;
   }
 
-  .site-nav .pwa-install-button {
+  .site-nav .pwa-install-button,
+  .site-nav .app-update-button {
     width: 100%;
     min-height: 42px;
     padding: 0 12px;

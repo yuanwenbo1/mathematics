@@ -1,7 +1,11 @@
 _site/
+_site-app/
 .jekyll-cache/
 .sass-cache/
 node_modules/
+dist/
+android/.gradle/
+android/app/build/
 textbook/.vitepress/
 .DS_Store
 *.log

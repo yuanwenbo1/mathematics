@@ -34,6 +34,14 @@ nav:
     url: /support/
 
 exclude:
+  - android
+  - dist
   - node_modules
   - package.json
   - package-lock.json
+  - capacitor.config.json
+  - resources
+  - scripts
+  - src
+  - tests
+  - _site-app

@@ -1,0 +1,12 @@
+{
+  "appId": "io.github.yuanwenbo1.mathematics",
+  "appName": "数学自学教材",
+  "webDir": "_site-app",
+  "server": {
+    "hostname": "localhost",
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}

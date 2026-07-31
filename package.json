@@ -1,0 +1,25 @@
+{
+  "name": "mathematics-textbook-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "数学自学教材网站与 Android 离线应用",
+  "scripts": {
+    "build:runtime": "esbuild src/app-content.js --bundle --minify --format=iife --target=chrome120,safari15 --outfile=assets/js/app-content.js",
+    "build:content": "node scripts/build-content-pack.mjs",
+    "build:info": "node scripts/write-build-info.mjs",
+    "app:prepare": "node scripts/prepare-capacitor-web.mjs",
+    "app:mirror": "node scripts/mirror-site.mjs",
+    "cap:sync": "cap sync android",
+    "android:debug": "npm run cap:sync && cd android && gradlew.bat assembleDebug",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.4.2",
+    "@capacitor/core": "8.4.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.4.2",
+    "cheerio": "1.2.0",
+    "esbuild": "0.28.1"
+  }
+}

@@ -1,0 +1,90 @@
+name: Build Android offline app
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/android.yml"
+      - "android/**"
+      - "assets/**"
+      - "resources/**"
+      - "scripts/**"
+      - "src/**"
+      - "_data/**"
+      - "_layouts/**"
+      - "textbook/**"
+      - "_config.yml"
+      - "capacitor.config.json"
+      - "*.md"
+      - "*.json"
+      - "*.js"
+      - "package-lock.json"
+      - "package.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-offline-app
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install build dependencies
+        run: npm ci
+
+      - name: Prepare application runtime and version
+        shell: bash
+        run: |
+          PUBLISHED_AT="$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"
+          npm run build:runtime
+          node scripts/write-build-info.mjs --version=${{ github.sha }} --target=app --publishedAt="$PUBLISHED_AT"
+
+      - name: Test content update builder
+        run: npm test
+
+      - name: Setup Pages build
+        uses: actions/configure-pages@v5
+
+      - name: Build bundled offline website
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+      - name: Prepare Capacitor web assets
+        run: npm run app:prepare
+
+      - name: Sync Android project
+        run: npx cap sync android
+
+      - name: Build installable APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Collect APK
+        run: |
+          mkdir -p dist
+          cp android/app/build/outputs/apk/debug/app-debug.apk "dist/mathematics-textbook-1.0.0-debug.apk"
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mathematics-textbook-android-debug
+          path: dist/mathematics-textbook-1.0.0-debug.apk
+          if-no-files-found: error
+          retention-days: 30

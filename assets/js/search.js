@@ -1,5 +1,7 @@
-(function () {
+(async function () {
   "use strict";
+
+  await (window.__CONTENT_READY__ || Promise.resolve());
 
   const input = document.getElementById("search-input");
   const results = document.getElementById("search-results");
@@ -68,11 +70,13 @@
   const scriptUrl = document.currentScript ? document.currentScript.src : window.location.href;
   const indexUrl = new URL("../../search.json", scriptUrl);
 
-  fetch(indexUrl)
-    .then((response) => {
-      if (!response.ok) throw new Error("search index unavailable");
-      return response.json();
-    })
+  const updatedDocuments = window.__APP_CONTENT_PACK__?.searchIndex;
+  const indexRequest = Array.isArray(updatedDocuments) ? Promise.resolve(updatedDocuments) : fetch(indexUrl).then((response) => {
+    if (!response.ok) throw new Error("search index unavailable");
+    return response.json();
+  });
+
+  indexRequest
     .then((data) => {
       documents = Array.isArray(data) ? data : [];
       input.disabled = false;

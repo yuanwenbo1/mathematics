@@ -46,6 +46,26 @@ search: true
 
 PWA 必须通过 HTTPS 或 `localhost` 测试。修改缓存内容时无需手工维护版本号，Jekyll 每次构建都会生成新的缓存版本；已安装的用户会收到更新提示。
 
+## Android 离线应用
+
+Android 应用使用 Capacitor 封装网站，并把发布时的全部教材、题库、图片和搜索资源打入 APK。安装后无需联网即可阅读；学习进度和错题状态保存在应用本地，不会在教材更新时被覆盖。
+
+应用导航中的“检查更新”会从 GitHub Pages 拉取最新教材包。下载前会核对发布版本、文件大小、页面数量和 SHA-256，校验失败时保留原有离线教材。更新包只包含教材正文、图片和搜索索引，不包含可执行脚本。
+
+本地构建需要 Node.js 22、JDK 17 和 Android SDK 36：
+
+```powershell
+npm ci
+npm run build:runtime
+# 先用 Jekyll 构建 _site，或从已发布网站生成离线镜像
+npm run app:mirror
+npm run cap:sync
+cd android
+.\gradlew.bat assembleDebug
+```
+
+调试安装包生成在 `android/app/build/outputs/apk/debug/app-debug.apk`。推送到 `main` 后，GitHub Actions 也会自动构建并保存 30 天可下载的 APK 构建产物。正式公开分发前应另行配置私有签名密钥并生成 release 包，签名密钥不能提交到仓库。
+
 ## 联系与反馈
 
 如果你发现教材内容有错误、网站使用有问题，或希望沟通项目合作，可以发送邮件至 [624799284@qq.com](mailto:624799284@qq.com)。为了便于定位问题，反馈时请尽量附上教材名称、页面地址和问题描述。

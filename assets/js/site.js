@@ -1,5 +1,8 @@
-(function () {
+(async function () {
   "use strict";
+
+  await (window.__CONTENT_READY__ || Promise.resolve());
+  const isNativeApp = window.__IS_NATIVE_APP__ === true;
 
   const PROGRESS_KEY = "mathematics-learning-progress-v1";
   const FONT_KEY = "mathematics-reader-font-size";
@@ -222,6 +225,7 @@
   if (installButton && isStandalone) installButton.hidden = true;
 
   window.addEventListener("beforeinstallprompt", (event) => {
+    if (isNativeApp) return;
     event.preventDefault();
     installPrompt = event;
     if (installButton && !isStandalone) installButton.hidden = false;
@@ -259,7 +263,7 @@
     });
   }
 
-  if ("serviceWorker" in navigator) {
+  if (!isNativeApp && "serviceWorker" in navigator) {
     window.addEventListener("load", async () => {
       const baseUrl = document.body.dataset.baseurl || "";
       try {
@@ -285,8 +289,10 @@
     });
   }
 
-  const showOfflineStatus = () => showPwaStatus("当前离线，正在使用已缓存教材", { persistent: true });
-  window.addEventListener("offline", showOfflineStatus);
-  window.addEventListener("online", () => showPwaStatus("网络已恢复"));
-  if (!navigator.onLine) showOfflineStatus();
+  if (!isNativeApp) {
+    const showOfflineStatus = () => showPwaStatus("当前离线，正在使用已缓存教材", { persistent: true });
+    window.addEventListener("offline", showOfflineStatus);
+    window.addEventListener("online", () => showPwaStatus("网络已恢复"));
+    if (!navigator.onLine) showOfflineStatus();
+  }
 })();
