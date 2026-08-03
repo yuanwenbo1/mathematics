@@ -5,6 +5,8 @@ import test from "node:test";
 test("responsive app shell exposes mobile navigation and a user-controlled update dialog", async () => {
   const base = await readFile("_layouts/base.html", "utf8");
   const book = await readFile("_layouts/book.html", "utf8");
+  const home = await readFile("index.md", "utf8");
+  const library = await readFile("library.md", "utf8");
   const styles = await readFile("assets/css/main.css", "utf8");
 
   assert.match(base, /class="mobile-tabbar"/);
@@ -17,7 +19,13 @@ test("responsive app shell exposes mobile navigation and a user-controlled updat
   assert.match(base, /id="update-dialog-install"/);
   assert.match(book, /id="reader-outline-toggle"/);
   assert.match(book, /id="reader-scroll-label"/);
+  assert.match(book, /id="reader-aside-progress"/);
+  assert.match(home, /class="home-dashboard"/);
+  assert.match(home, /class="daily-task-list"/);
+  assert.match(library, /class="site-container library-shell"/);
+  assert.match(library, /class="library-stage-nav"/);
   assert.match(styles, /@media \(max-width: 700px\)[\s\S]*\.mobile-tabbar/);
+  assert.match(styles, /@media \(max-width: 900px\)[\s\S]*\.library-stage-nav/);
 
   let depth = 0;
   for (const character of styles.replace(/\/\*[\s\S]*?\*\//g, "")) {

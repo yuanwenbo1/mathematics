@@ -67,6 +67,8 @@
   const meter = document.getElementById("reading-meter-value");
   const reader = document.querySelector(".book-reader");
   const readerScrollLabel = document.getElementById("reader-scroll-label");
+  const readerAsidePercent = document.getElementById("reader-aside-percent");
+  const readerAsideProgress = document.getElementById("reader-aside-progress");
   let lastSavedPercent = -1;
 
   const saveLastRead = (percent) => {
@@ -94,6 +96,8 @@
     if (readerScrollLabel) {
       const rounded = Math.round(value);
       readerScrollLabel.textContent = `阅读进度 ${rounded}%`;
+      if (readerAsidePercent) readerAsidePercent.textContent = `${rounded}%`;
+      if (readerAsideProgress) readerAsideProgress.style.width = `${rounded}%`;
       saveLastRead(rounded);
     }
   };
@@ -155,6 +159,7 @@
     const resumeDetail = document.getElementById("resume-detail");
     const resumeLink = document.getElementById("resume-link");
     const continueLink = document.getElementById("continue-learning");
+    const continueHeading = document.getElementById("continue-heading");
     if (!resumeStrip || !resumeTitle || !resumeDetail || !resumeLink) return;
 
     const lastRead = safeParse(localStorage.getItem(LAST_READ_KEY) || "null", null);
@@ -166,6 +171,7 @@
     resumeDetail.textContent = `阅读进度 ${percent}%`;
     resumeLink.href = lastRead.url;
     resumeStrip.hidden = false;
+    if (continueHeading) continueHeading.textContent = lastRead.title || "继续上次阅读";
     if (continueLink) {
       continueLink.href = lastRead.url;
       continueLink.firstChild.textContent = "继续上次学习 ";

@@ -2,9 +2,21 @@
 layout: base
 ---
 
+{% assign current_book_title = '学习资料' %}
+{% assign current_book_url = '/library/' %}
+{% for stage in site.data.curriculum.stages %}
+  {% for book in stage.books %}
+    {% if page.book_id == book.id %}
+      {% assign current_book_title = book.title %}
+      {% assign current_book_url = book.url %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
 <button class="book-menu-button" id="book-menu-button" type="button" aria-expanded="false" aria-controls="book-sidebar">
   <span class="book-menu-symbol">☰</span>
-  教材目录
+  <span>章节目录</span>
+  <strong>{{ current_book_title }}</strong>
 </button>
 
 <div class="book-shell">
@@ -52,14 +64,21 @@ layout: base
   <article class="book-reader" data-course-id="{{ page.book_id }}" data-reader-title="{{ page.title | escape }}">
     <div class="reader-toolbar">
       <div class="reader-location">
-        <a href="{{ '/library/' | relative_url }}">教材目录</a>
-        <span id="reader-scroll-label">阅读进度 0%</span>
+        <nav aria-label="当前位置">
+          <a href="{{ '/library/' | relative_url }}">教材</a>
+          <span aria-hidden="true">/</span>
+          <a href="{{ current_book_url | relative_url }}">{{ current_book_title }}</a>
+        </nav>
+        <span class="reader-mode">{% if page.chapter_id %}分章学习{% else %}教材总览{% endif %}</span>
       </div>
-      <button class="reader-outline-toggle" id="reader-outline-toggle" type="button" aria-expanded="false" aria-controls="reader-outline-panel">本页目录</button>
-      <div class="font-controls" aria-label="阅读字号">
-        <button type="button" data-font-action="decrease" aria-label="减小字号" title="减小字号">A−</button>
-        <button type="button" data-font-action="reset" aria-label="恢复默认字号" title="恢复默认字号">A</button>
-        <button type="button" data-font-action="increase" aria-label="增大字号" title="增大字号">A+</button>
+      <div class="reader-tools">
+        <span class="reader-scroll-label" id="reader-scroll-label">阅读进度 0%</span>
+        <button class="reader-outline-toggle" id="reader-outline-toggle" type="button" aria-expanded="false" aria-controls="reader-outline-panel">本页目录</button>
+        <div class="font-controls" aria-label="阅读字号">
+          <button type="button" data-font-action="decrease" aria-label="减小字号" title="减小字号">A−</button>
+          <button type="button" data-font-action="reset" aria-label="恢复默认字号" title="恢复默认字号">A</button>
+          <button type="button" data-font-action="increase" aria-label="增大字号" title="增大字号">A+</button>
+        </div>
       </div>
       <div class="reader-outline-panel" id="reader-outline-panel" hidden>
         <strong>本页目录</strong>
@@ -97,9 +116,15 @@ layout: base
     {% endif %}
   </article>
 
-  <aside class="page-outline" aria-label="本页目录">
+  <aside class="page-outline" aria-label="阅读辅助">
+    <div class="outline-progress">
+      <span>本页阅读</span>
+      <strong id="reader-aside-percent">0%</strong>
+      <div aria-hidden="true"><span id="reader-aside-progress"></span></div>
+    </div>
     <strong>本页目录</strong>
     <nav id="page-outline"></nav>
+    <a class="outline-back-link" href="{{ current_book_url | relative_url }}">返回本册目录 →</a>
   </aside>
 </div>
 
