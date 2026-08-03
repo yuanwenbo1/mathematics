@@ -34,6 +34,9 @@ const PRECACHE_URLS = [
   "{{ '/books/ai-math/' | relative_url }}",
   "{{ '/books/advanced-topics/' | relative_url }}",
   "{{ '/books/professional/' | relative_url }}",
+  {% for chapter in site.data.k12_chapters.prelude %}"{{ chapter.url | relative_url }}",{% endfor %}
+  {% for chapter in site.data.k12_chapters.restart %}"{{ chapter.url | relative_url }}",{% endfor %}
+  {% for chapter in site.data.k12_chapters.functions %}"{{ chapter.url | relative_url }}",{% endfor %}
   "{{ '/search/' | relative_url }}",
   "{{ '/search.json' | relative_url }}",
   "{{ '/support/' | relative_url }}",

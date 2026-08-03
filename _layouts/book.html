@@ -26,11 +26,23 @@ layout: base
         <div class="curriculum-group">
           <strong>{{ stage.title | remove: '阶段一：' | remove: '阶段二：' | remove: '阶段三：' | remove: '阶段四：' }}</strong>
           {% for book in stage.books %}
-            <a class="curriculum-link{% if page.url == book.url %} active{% endif %}" href="{{ book.url | relative_url }}" data-course-id="{{ book.id }}"{% if page.url == book.url %} aria-current="page"{% endif %}>
+            <a class="curriculum-link{% if page.book_id == book.id %} active{% endif %}" href="{{ book.url | relative_url }}" data-course-id="{{ book.id }}"{% if page.url == book.url %} aria-current="page"{% endif %}>
               <span>{{ book.code }}</span>
               <em>{{ book.title }}</em>
               <i aria-hidden="true"></i>
             </a>
+            {% assign book_chapters = site.data.k12_chapters[book.id] %}
+            {% if page.book_id == book.id and book_chapters %}
+              <div class="chapter-nav" aria-label="{{ book.title }}分章目录">
+                {% for chapter in book_chapters %}
+                  <a class="chapter-link{% if page.chapter_id == chapter.id %} active{% endif %}" href="{{ chapter.url | relative_url }}" data-chapter-id="{{ chapter.id }}"{% if page.chapter_id == chapter.id %} aria-current="page"{% endif %}>
+                    <span>{{ forloop.index }}</span>
+                    <em>{{ chapter.title }}</em>
+                    <i aria-hidden="true"></i>
+                  </a>
+                {% endfor %}
+              </div>
+            {% endif %}
           {% endfor %}
         </div>
       {% endfor %}
@@ -62,20 +74,24 @@ layout: base
     {% if page.book_id %}
       <section class="completion-panel" aria-label="学习完成状态">
         <div>
-          <strong id="completion-title">完成本册学习了吗？</strong>
+          <strong id="completion-title">{% if page.chapter_id %}完成本章学习了吗？{% else %}完成本册学习了吗？{% endif %}</strong>
           <span>进度只保存在当前浏览器中。</span>
         </div>
-        <button id="completion-toggle" type="button" data-course-id="{{ page.book_id }}">标记完成</button>
+        {% if page.chapter_id %}
+          <button id="completion-toggle" type="button" data-chapter-id="{{ page.chapter_id }}">标记本章完成</button>
+        {% else %}
+          <button id="completion-toggle" type="button" data-course-id="{{ page.book_id }}">标记完成</button>
+        {% endif %}
       </section>
     {% endif %}
 
     {% if page.prev_url or page.next_url %}
       <nav class="book-pager" aria-label="教材前后导航">
         {% if page.prev_url %}
-          <a class="pager-prev" href="{{ page.prev_url | relative_url }}"><span>上一册</span><strong>{{ page.prev_title }}</strong></a>
+          <a class="pager-prev" href="{{ page.prev_url | relative_url }}"><span>{% if page.chapter_id %}上一章{% else %}上一册{% endif %}</span><strong>{{ page.prev_title }}</strong></a>
         {% else %}<span></span>{% endif %}
         {% if page.next_url %}
-          <a class="pager-next" href="{{ page.next_url | relative_url }}"><span>下一册</span><strong>{{ page.next_title }}</strong></a>
+          <a class="pager-next" href="{{ page.next_url | relative_url }}"><span>{% if page.chapter_id %}下一章{% else %}开始分章学习{% endif %}</span><strong>{{ page.next_title }}</strong></a>
         {% endif %}
       </nav>
     {% endif %}

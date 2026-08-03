@@ -1,6 +1,6 @@
 # 数学自学教材网站
 
-这是一个基于 GitHub Pages + Jekyll 的中文数学学习网站，面向所有希望系统自学数学的学生。前三册按中国现行课程标准完整覆盖小学、初中和高中数学，后续继续进入大学数学、应用专题和研究方向。教材正文位于 `textbook/`，网站模板位于 `_layouts/`，静态样式和脚本位于 `assets/`。
+这是一个基于 GitHub Pages + Jekyll 的中文数学学习网站，面向所有希望系统自学数学的学生。前三册按中国现行课程标准完整覆盖小学、初中和高中数学，后续继续进入大学数学、应用专题和研究方向。教材正文位于 `textbook/`，中小学分章正文位于 `textbook/k12/`，网站模板位于 `_layouts/`，静态样式和脚本位于 `assets/`。
 
 中小学主题与章节的逐项对应见[中国中小学数学课程覆盖索引](https://yuanwenbo1.github.io/mathematics/k12-coverage/)。
 
@@ -34,6 +34,17 @@ search: true
 ```
 
 新增教材后，同时在 `_data/curriculum.yml` 中加入导航信息。推送到 `main` 分支后，GitHub Actions 会使用 Jekyll 构建并发布到 GitHub Pages。
+
+小学、初中和高中采用“学段入口页 + 每章一个 Markdown 文件”的结构：
+
+```text
+textbook/k12/primary/   小学分章正文
+textbook/k12/junior/    初中分章正文
+textbook/k12/senior/    高中分章正文
+_data/k12_chapters.json 分章标题、顺序、地址和摘要
+```
+
+调整章节正文时直接编辑对应的分章文件。新增、删除或调整章节顺序时，还要同步修改 `_data/k12_chapters.json` 以及相邻章节 Front Matter 中的 `prev_url`、`next_url`；三个原有学段文件只作为总览和分章入口，不再承载全部正文。
 
 ## PWA 应用
 

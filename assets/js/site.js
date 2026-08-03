@@ -5,6 +5,7 @@
   const isNativeApp = window.__IS_NATIVE_APP__ === true;
 
   const PROGRESS_KEY = "mathematics-learning-progress-v1";
+  const CHAPTER_PROGRESS_KEY = "mathematics-chapter-progress-v1";
   const FONT_KEY = "mathematics-reader-font-size";
   const LAST_READ_KEY = "mathematics-last-read-v1";
   const courseOrder = [
@@ -37,6 +38,15 @@
 
   const saveCompleted = (completed) => {
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(Array.from(completed)));
+  };
+
+  const getCompletedChapters = () => {
+    const value = safeParse(localStorage.getItem(CHAPTER_PROGRESS_KEY) || "[]", []);
+    return new Set(Array.isArray(value) ? value : []);
+  };
+
+  const saveCompletedChapters = (completed) => {
+    localStorage.setItem(CHAPTER_PROGRESS_KEY, JSON.stringify(Array.from(completed)));
   };
 
   const navToggle = document.getElementById("nav-toggle");
@@ -130,6 +140,15 @@
     return completed;
   };
 
+  const refreshChapterProgress = () => {
+    const completedChapters = getCompletedChapters();
+    document.querySelectorAll("[data-chapter-id]").forEach((element) => {
+      const id = element.getAttribute("data-chapter-id");
+      element.classList.toggle("is-complete", Boolean(id && completedChapters.has(id)));
+    });
+    return completedChapters;
+  };
+
   const refreshResume = () => {
     const resumeStrip = document.getElementById("resume-strip");
     const resumeTitle = document.getElementById("resume-title");
@@ -154,29 +173,41 @@
   };
 
   let completed = refreshProgress();
+  let completedChapters = refreshChapterProgress();
   refreshResume();
   const completionButton = document.getElementById("completion-toggle");
   const completionTitle = document.getElementById("completion-title");
 
   const refreshCompletionButton = () => {
     if (!completionButton) return;
-    const id = completionButton.getAttribute("data-course-id");
-    const isComplete = Boolean(id && completed.has(id));
+    const chapterId = completionButton.getAttribute("data-chapter-id");
+    const courseId = completionButton.getAttribute("data-course-id");
+    const isChapter = Boolean(chapterId);
+    const isComplete = isChapter ? completedChapters.has(chapterId) : Boolean(courseId && completed.has(courseId));
     completionButton.classList.toggle("is-complete", isComplete);
-    completionButton.textContent = isComplete ? "取消完成" : "标记完成";
-    if (completionTitle) completionTitle.textContent = isComplete ? "本册已完成" : "完成本册学习了吗？";
+    completionButton.textContent = isComplete ? "取消完成" : isChapter ? "标记本章完成" : "标记完成";
+    if (completionTitle) {
+      completionTitle.textContent = isComplete ? (isChapter ? "本章已完成" : "本册已完成") : isChapter ? "完成本章学习了吗？" : "完成本册学习了吗？";
+    }
   };
 
   refreshCompletionButton();
 
   if (completionButton) {
     completionButton.addEventListener("click", () => {
-      const id = completionButton.getAttribute("data-course-id");
-      if (!id) return;
-      if (completed.has(id)) completed.delete(id);
-      else completed.add(id);
-      saveCompleted(completed);
-      completed = refreshProgress();
+      const chapterId = completionButton.getAttribute("data-chapter-id");
+      const courseId = completionButton.getAttribute("data-course-id");
+      if (chapterId) {
+        if (completedChapters.has(chapterId)) completedChapters.delete(chapterId);
+        else completedChapters.add(chapterId);
+        saveCompletedChapters(completedChapters);
+        completedChapters = refreshChapterProgress();
+      } else if (courseId) {
+        if (completed.has(courseId)) completed.delete(courseId);
+        else completed.add(courseId);
+        saveCompleted(completed);
+        completed = refreshProgress();
+      }
       refreshCompletionButton();
     });
   }
