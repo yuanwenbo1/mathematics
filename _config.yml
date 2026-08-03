@@ -22,16 +22,10 @@ nav:
     url: /library/
   - title: 学习路线
     url: /guide/
-  - title: 知识地图
-    url: /dependencies/
-  - title: 中小学覆盖
-    url: /k12-coverage/
   - title: 训练题库
     url: /exercises/
   - title: 搜索
     url: /search/
-  - title: 支持项目
-    url: /support/
 
 exclude:
   - android

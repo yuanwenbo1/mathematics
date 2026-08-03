@@ -8,7 +8,10 @@ const DATABASE_NAME = "mathematics-offline-content";
 const DATABASE_VERSION = 1;
 const STORE_NAME = "content";
 const ACTIVE_PACK_KEY = "active-pack";
+const DISMISSED_UPDATE_KEY = "mathematics-dismissed-update-v1";
 const MAX_PACK_BYTES = 30 * 1024 * 1024;
+const CHECK_INTERVAL_MS = 30 * 60 * 1000;
+const DISMISS_INTERVAL_MS = 24 * 60 * 60 * 1000;
 const TRUSTED_ORIGIN = "https://yuanwenbo1.github.io";
 const TRUSTED_PATH = "/mathematics/";
 const isNativeApp = Capacitor.isNativePlatform();
@@ -149,6 +152,12 @@ let latestInfo = null;
 let activePack = null;
 let updateButton = null;
 let statusTimer = null;
+let checkPromise = null;
+let lastCheckedAt = 0;
+let lastFocusedElement = null;
+
+const dialog = () => document.getElementById("update-dialog");
+const dialogInstall = () => document.getElementById("update-dialog-install");
 
 const showStatus = (message, persistent = false) => {
   const status = document.getElementById("pwa-status");
@@ -163,6 +172,7 @@ const showStatus = (message, persistent = false) => {
 };
 
 const nativeGet = async (url) => {
+  if (!CapacitorHttp) throw new Error("Native HTTP is unavailable.");
   if (!isTrustedUpdateUrl(url)) throw new Error("Untrusted textbook update URL.");
   const response = await CapacitorHttp.get({
     url,
@@ -190,7 +200,8 @@ const validateVersionInfo = (info) =>
       info.byteLength > 0 &&
       info.byteLength <= MAX_PACK_BYTES &&
       /^[0-9a-f]{64}$/.test(info.sha256 || "") &&
-      isTrustedUpdateUrl(info.downloadUrl)
+      isTrustedUpdateUrl(info.downloadUrl) &&
+      (info.summary === undefined || (typeof info.summary === "string" && info.summary.length <= 280))
   );
 
 const hasNewerContent = (info) => {
@@ -201,28 +212,82 @@ const hasNewerContent = (info) => {
 
 const setButtonState = (hasUpdate) => {
   if (!updateButton) return;
-  updateButton.textContent = hasUpdate ? "更新教材" : "检查更新";
+  const marker = document.createElement("span");
+  marker.setAttribute("aria-hidden", "true");
+  updateButton.replaceChildren(marker, document.createTextNode(hasUpdate ? "课程有更新" : "检查更新"));
   updateButton.classList.toggle("has-update", hasUpdate);
   updateButton.disabled = false;
 };
 
-const checkForUpdate = async ({ silent = false } = {}) => {
+const formatDate = (value) =>
+  new Intl.DateTimeFormat("zh-CN", { year: "numeric", month: "long", day: "numeric" }).format(new Date(value));
+
+const formatBytes = (bytes) => (bytes < 1024 * 1024 ? `${Math.ceil(bytes / 1024)} KB` : `${(bytes / 1024 / 1024).toFixed(1)} MB`);
+
+const shouldAnnounce = (info) => {
+  try {
+    const dismissed = JSON.parse(localStorage.getItem(DISMISSED_UPDATE_KEY) || "null");
+    return !dismissed || dismissed.version !== info.version || Date.now() - dismissed.at >= DISMISS_INTERVAL_MS;
+  } catch (_error) {
+    return true;
+  }
+};
+
+const showUpdateDialog = (info, { force = false } = {}) => {
+  const updateDialog = dialog();
+  if (!updateDialog || !validateVersionInfo(info) || (!force && !shouldAnnounce(info))) return false;
+  document.getElementById("update-dialog-summary").textContent =
+    info.summary || "发现新的课程内容，可以现在下载，也可以继续使用当前离线教材。";
+  document.getElementById("update-dialog-date").textContent = formatDate(info.publishedAt);
+  document.getElementById("update-dialog-pages").textContent = `${info.pageCount} 页`;
+  document.getElementById("update-dialog-size").textContent = formatBytes(info.byteLength);
+  lastFocusedElement = document.activeElement;
+  updateDialog.hidden = false;
+  document.body.classList.add("update-dialog-open");
+  dialogInstall()?.focus();
+  return true;
+};
+
+const dismissUpdateDialog = ({ remember = true } = {}) => {
+  const updateDialog = dialog();
+  if (!updateDialog || updateDialog.hidden) return;
+  if (remember && latestInfo) {
+    localStorage.setItem(DISMISSED_UPDATE_KEY, JSON.stringify({ version: latestInfo.version, at: Date.now() }));
+  }
+  updateDialog.hidden = true;
+  document.body.classList.remove("update-dialog-open");
+  if (lastFocusedElement instanceof HTMLElement) lastFocusedElement.focus();
+};
+
+const performUpdateCheck = async ({ silent = false, announce = true } = {}) => {
   if (!isNativeApp || !versionEndpoint || !isTrustedUpdateUrl(versionEndpoint)) return { available: false };
   try {
     const separator = versionEndpoint.includes("?") ? "&" : "?";
     const info = await nativeGet(`${versionEndpoint}${separator}time=${Date.now()}`);
     if (!validateVersionInfo(info)) throw new Error("Invalid textbook version manifest.");
     latestInfo = info;
+    lastCheckedAt = Date.now();
     const available = hasNewerContent(info);
     setButtonState(available);
+    if (available && announce) showUpdateDialog(info);
     if (!silent) showStatus(available ? "发现新的教材版本" : "教材已是最新版本");
     return { available, info };
   } catch (error) {
+    lastCheckedAt = Date.now();
     setButtonState(false);
     if (!silent) showStatus("无法连接更新服务器，继续使用本地教材");
     console.error("Unable to check textbook updates:", error);
     return { available: false, error };
   }
+};
+
+const checkForUpdate = (options = {}) => {
+  if (!checkPromise) {
+    checkPromise = performUpdateCheck(options).finally(() => {
+      checkPromise = null;
+    });
+  }
+  return checkPromise;
 };
 
 const sha256 = async (value) => {
@@ -231,10 +296,17 @@ const sha256 = async (value) => {
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
 };
 
+const setDownloadState = (isDownloading) => {
+  const installButton = dialogInstall();
+  if (updateButton) updateButton.disabled = isDownloading;
+  if (!installButton) return;
+  installButton.disabled = isDownloading;
+  installButton.textContent = isDownloading ? "正在下载并校验..." : "下载并更新";
+};
+
 const downloadUpdate = async (info) => {
   if (!validateVersionInfo(info) || !hasNewerContent(info)) return false;
-  updateButton.disabled = true;
-  updateButton.textContent = "正在更新";
+  setDownloadState(true);
   showStatus("正在下载并校验教材更新...", true);
 
   try {
@@ -250,10 +322,12 @@ const downloadUpdate = async (info) => {
     }
 
     await storePack(pack);
+    localStorage.removeItem(DISMISSED_UPDATE_KEY);
     showStatus("教材更新完成，正在重新载入...", true);
     window.setTimeout(() => window.location.reload(), 800);
     return true;
   } catch (error) {
+    setDownloadState(false);
     setButtonState(true);
     showStatus("教材更新失败，已继续使用原有离线教材");
     console.error("Unable to install textbook update:", error);
@@ -263,10 +337,25 @@ const downloadUpdate = async (info) => {
 
 const handleUpdateClick = async () => {
   if (!latestInfo || !hasNewerContent(latestInfo)) {
-    const result = await checkForUpdate({ silent: false });
+    const result = await checkForUpdate({ silent: false, announce: false });
     if (!result.available) return;
   }
-  await downloadUpdate(latestInfo);
+  showUpdateDialog(latestInfo, { force: true });
+};
+
+const checkAfterResume = () => {
+  if (!isNativeApp || document.visibilityState === "hidden" || Date.now() - lastCheckedAt < CHECK_INTERVAL_MS) return;
+  checkForUpdate({ silent: true, announce: true });
+};
+
+const setupUpdateDialog = () => {
+  ["update-dialog-later", "update-dialog-close", "update-dialog-backdrop"].forEach((id) => {
+    document.getElementById(id)?.addEventListener("click", () => dismissUpdateDialog({ remember: true }));
+  });
+  dialogInstall()?.addEventListener("click", () => downloadUpdate(latestInfo));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && dialog() && !dialog().hidden) dismissUpdateDialog({ remember: true });
+  });
 };
 
 const setupNativeUpdates = async () => {
@@ -280,7 +369,11 @@ const setupNativeUpdates = async () => {
   updateButton.hidden = false;
   updateButton.title = `当前教材版本 ${currentContent().version.slice(0, 7)}`;
   updateButton.addEventListener("click", handleUpdateClick);
-  await checkForUpdate({ silent: true });
+  setupUpdateDialog();
+  document.addEventListener("visibilitychange", checkAfterResume);
+  window.addEventListener("focus", checkAfterResume);
+  window.addEventListener("online", () => checkForUpdate({ silent: true, announce: true }));
+  await checkForUpdate({ silent: true, announce: true });
 };
 
 window.AppContentUpdater = { checkForUpdate, downloadUpdate, isNativeApp };

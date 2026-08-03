@@ -135,6 +135,7 @@ export const buildContentPack = async ({
     pageCount: Object.keys(pages).length,
     byteLength: Buffer.byteLength(serialized),
     sha256,
+    summary: "课程内容、学习导航和阅读体验已更新。你可以现在下载，也可以稍后继续使用当前离线教材。",
     downloadUrl: `${origin}${normalizedBaseurl}/app-content.json`
   };
 

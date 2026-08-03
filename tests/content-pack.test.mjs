@@ -27,6 +27,7 @@ test("content pack embeds images, removes executable markup, and hashes atomical
 
     assert.equal(result.manifest.version, version);
     assert.equal(result.manifest.pageCount, 1);
+    assert.match(result.manifest.summary, /课程内容/);
     assert.equal(result.pack.searchIndex.length, 1);
     assert.ok(page.html.includes("data:image/png;base64,"));
     assert.ok(!page.html.includes("<script"));

@@ -6,6 +6,7 @@
 
   const PROGRESS_KEY = "mathematics-learning-progress-v1";
   const FONT_KEY = "mathematics-reader-font-size";
+  const LAST_READ_KEY = "mathematics-last-read-v1";
   const courseOrder = [
     "prelude",
     "restart",
@@ -41,20 +42,50 @@
   const navToggle = document.getElementById("nav-toggle");
   const siteNav = document.getElementById("site-nav");
 
+  const setMainNavOpen = (isOpen) => {
+    if (!navToggle || !siteNav) return;
+    siteNav.classList.toggle("is-open", isOpen);
+    navToggle.setAttribute("aria-expanded", String(isOpen));
+    navToggle.title = isOpen ? "关闭导航" : "打开导航";
+  };
+
   if (navToggle && siteNav) {
-    navToggle.addEventListener("click", () => {
-      const isOpen = siteNav.classList.toggle("is-open");
-      navToggle.setAttribute("aria-expanded", String(isOpen));
-      navToggle.title = isOpen ? "关闭导航" : "打开导航";
-    });
+    navToggle.addEventListener("click", () => setMainNavOpen(!siteNav.classList.contains("is-open")));
+    siteNav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setMainNavOpen(false)));
   }
 
   const meter = document.getElementById("reading-meter-value");
+  const reader = document.querySelector(".book-reader");
+  const readerScrollLabel = document.getElementById("reader-scroll-label");
+  let lastSavedPercent = -1;
+
+  const saveLastRead = (percent) => {
+    if (!reader || percent === lastSavedPercent) return;
+    const baseUrl = document.body.dataset.baseurl || "";
+    if (!window.location.pathname.startsWith(`${baseUrl}/`)) return;
+    lastSavedPercent = percent;
+    localStorage.setItem(
+      LAST_READ_KEY,
+      JSON.stringify({
+        url: `${window.location.pathname}${window.location.search}`,
+        title: reader.dataset.readerTitle || document.body.dataset.pageTitle || document.title,
+        courseId: reader.dataset.courseId || "",
+        percent,
+        updatedAt: new Date().toISOString()
+      })
+    );
+  };
+
   const updateReadingMeter = () => {
     if (!meter) return;
     const distance = document.documentElement.scrollHeight - window.innerHeight;
     const value = distance > 0 ? Math.min(100, Math.max(0, (window.scrollY / distance) * 100)) : 0;
     meter.style.width = `${value}%`;
+    if (readerScrollLabel) {
+      const rounded = Math.round(value);
+      readerScrollLabel.textContent = `阅读进度 ${rounded}%`;
+      saveLastRead(rounded);
+    }
   };
 
   updateReadingMeter();
@@ -99,7 +130,31 @@
     return completed;
   };
 
+  const refreshResume = () => {
+    const resumeStrip = document.getElementById("resume-strip");
+    const resumeTitle = document.getElementById("resume-title");
+    const resumeDetail = document.getElementById("resume-detail");
+    const resumeLink = document.getElementById("resume-link");
+    const continueLink = document.getElementById("continue-learning");
+    if (!resumeStrip || !resumeTitle || !resumeDetail || !resumeLink) return;
+
+    const lastRead = safeParse(localStorage.getItem(LAST_READ_KEY) || "null", null);
+    const baseUrl = document.body.dataset.baseurl || "";
+    if (!lastRead || typeof lastRead.url !== "string" || !lastRead.url.startsWith(`${baseUrl}/books/`)) return;
+
+    const percent = Math.min(100, Math.max(0, Number(lastRead.percent) || 0));
+    resumeTitle.textContent = lastRead.title || "继续上次阅读";
+    resumeDetail.textContent = `阅读进度 ${percent}%`;
+    resumeLink.href = lastRead.url;
+    resumeStrip.hidden = false;
+    if (continueLink) {
+      continueLink.href = lastRead.url;
+      continueLink.firstChild.textContent = "继续上次学习 ";
+    }
+  };
+
   let completed = refreshProgress();
+  refreshResume();
   const completionButton = document.getElementById("completion-toggle");
   const completionTitle = document.getElementById("completion-title");
 
@@ -165,20 +220,33 @@
   if (sidebarOverlay) sidebarOverlay.addEventListener("click", () => setSidebarOpen(false));
 
   const outline = document.getElementById("page-outline");
+  const mobileOutline = document.getElementById("reader-outline-mobile");
+  const outlineToggle = document.getElementById("reader-outline-toggle");
+  const outlinePanel = document.getElementById("reader-outline-panel");
   const headings = Array.from(document.querySelectorAll(".book-reader .prose h2, .book-reader .prose h3"));
 
-  if (outline && headings.length) {
+  const setOutlineOpen = (isOpen) => {
+    if (!outlineToggle || !outlinePanel) return;
+    outlinePanel.hidden = !isOpen;
+    outlineToggle.setAttribute("aria-expanded", String(isOpen));
+  };
+
+  if (headings.length && (outline || mobileOutline)) {
+    const outlineTargets = [outline, mobileOutline].filter(Boolean);
     headings.forEach((heading, index) => {
       if (!heading.id) heading.id = `section-${index + 1}`;
-      const link = document.createElement("a");
-      link.href = `#${heading.id}`;
-      link.textContent = heading.textContent || "章节";
-      link.dataset.level = heading.tagName === "H3" ? "3" : "2";
-      outline.appendChild(link);
+      outlineTargets.forEach((target) => {
+        const link = document.createElement("a");
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent || "章节";
+        link.dataset.level = heading.tagName === "H3" ? "3" : "2";
+        link.addEventListener("click", () => setOutlineOpen(false));
+        target.appendChild(link);
+      });
     });
 
     if ("IntersectionObserver" in window) {
-      const links = Array.from(outline.querySelectorAll("a"));
+      const links = outlineTargets.flatMap((target) => Array.from(target.querySelectorAll("a")));
       const observer = new IntersectionObserver(
         (entries) => {
           const visible = entries.find((entry) => entry.isIntersecting);
@@ -190,6 +258,8 @@
       headings.forEach((heading) => observer.observe(heading));
     }
   }
+
+  if (outlineToggle) outlineToggle.addEventListener("click", () => setOutlineOpen(outlinePanel?.hidden !== false));
 
   const installButton = document.getElementById("pwa-install-button");
   const pwaStatus = document.getElementById("pwa-status");
@@ -220,6 +290,13 @@
       pwaStatus.hidden = true;
     });
   }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    setMainNavOpen(false);
+    setSidebarOpen(false);
+    setOutlineOpen(false);
+  });
 
   const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
   if (installButton && isStandalone) installButton.hidden = true;

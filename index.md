@@ -8,12 +8,12 @@ search: false
 
 <section class="learning-intro">
   <div class="site-container">
-    <p class="eyebrow">系统学习路线</p>
+    <p class="eyebrow">从当前水平开始，沿知识依赖前进</p>
     <h1>数学自学教材</h1>
-    <p class="intro-lead">面向所有想系统自学数学的学生，从中国小学、初中和高中课程开始，继续通向大学数学、证明训练和研究方向。按知识依赖学习，每一步都有讲解、例题、练习和验收。</p>
+    <p class="intro-lead">覆盖中国小学、初中、高中并继续通向大学数学。每一册都按“核心概念、例题、训练、验收”组织，学完一段再进入下一段。</p>
     <div class="intro-actions">
       <a class="button primary" id="continue-learning" href="{{ '/books/prelude/' | relative_url }}">从小学数学开始 <span>→</span></a>
-      <a class="button secondary" href="{{ '/continuity/' | relative_url }}">查看连续学习路线</a>
+      <a class="button secondary" href="{{ '/guide/' | relative_url }}">选择适合的起点</a>
     </div>
   </div>
 </section>
@@ -26,6 +26,15 @@ search: false
     </div>
     <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="home-progress-track"><span id="home-progress-value"></span></div>
     <b id="home-progress-percent">0%</b>
+  </div>
+
+  <div class="site-container resume-strip" id="resume-strip" hidden>
+    <div>
+      <span>上次学习</span>
+      <strong id="resume-title">继续上次阅读</strong>
+      <small id="resume-detail">阅读进度 0%</small>
+    </div>
+    <a class="button secondary" id="resume-link" href="{{ '/library/' | relative_url }}">继续阅读 <span>→</span></a>
   </div>
 
   <div class="site-container learning-principles" aria-label="学习方式">
