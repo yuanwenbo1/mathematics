@@ -17,8 +17,8 @@
     <link rel="manifest" href="{{ '/manifest.webmanifest' | relative_url }}">
     <link rel="icon" href="{{ '/assets/icons/app-icon.svg' | relative_url }}" type="image/svg+xml">
     <link rel="apple-touch-icon" href="{{ '/assets/icons/apple-touch-icon.png' | relative_url }}">
-    <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
-    <script src="{{ '/assets/js/app-content.js' | relative_url }}?v=20260803-ui" defer></script>
+    <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.data.build.version | default: 'development' }}">
+    <script src="{{ '/assets/js/app-content.js' | relative_url }}?v={{ site.data.build.version | default: 'development' }}" defer></script>
   </head>
   <body class="layout-{{ page.layout | default: 'base' }}" data-baseurl="{{ site.baseurl }}" data-page-url="{{ page.url }}" data-page-title="{{ page.title | escape }}">
     <div class="reading-meter" aria-hidden="true"><span id="reading-meter-value"></span></div>
@@ -111,6 +111,6 @@
       <button class="pwa-status-close" id="pwa-status-close" type="button" title="关闭通知" aria-label="关闭通知">&times;</button>
     </div>
 
-    <script src="{{ '/assets/js/site.js' | relative_url }}?v=20260803-ui" defer></script>
+    <script src="{{ '/assets/js/site.js' | relative_url }}?v={{ site.data.build.version | default: 'development' }}" defer></script>
   </body>
 </html>

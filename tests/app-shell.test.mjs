@@ -8,6 +8,10 @@ test("responsive app shell exposes mobile navigation and a user-controlled updat
   const styles = await readFile("assets/css/main.css", "utf8");
 
   assert.match(base, /class="mobile-tabbar"/);
+  assert.doesNotMatch(base, /20260803-ui/);
+  assert.match(base, /assets\/css\/main\.css[\s\S]*site\.data\.build\.version/);
+  assert.match(base, /assets\/js\/app-content\.js[\s\S]*site\.data\.build\.version/);
+  assert.match(base, /assets\/js\/site\.js[\s\S]*site\.data\.build\.version/);
   assert.match(base, /id="update-dialog"/);
   assert.match(base, /id="update-dialog-later"/);
   assert.match(base, /id="update-dialog-install"/);
