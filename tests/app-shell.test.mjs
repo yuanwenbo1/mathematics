@@ -14,6 +14,14 @@ test("responsive app shell exposes mobile navigation and a user-controlled updat
   assert.match(book, /id="reader-outline-toggle"/);
   assert.match(book, /id="reader-scroll-label"/);
   assert.match(styles, /@media \(max-width: 700px\)[\s\S]*\.mobile-tabbar/);
+
+  let depth = 0;
+  for (const character of styles.replace(/\/\*[\s\S]*?\*\//g, "")) {
+    if (character === "{") depth += 1;
+    if (character === "}") depth -= 1;
+    assert.ok(depth >= 0, "CSS closes a block before it is opened");
+  }
+  assert.equal(depth, 0, "CSS block braces must be balanced");
 });
 
 test("Android schedules offline course checks and declares notification permissions", async () => {
